@@ -46,114 +46,144 @@ if [ "$USE_GITHUB" = true ]; then
   echo "=== ZMK Corne Firmware Build (GitHub Actions) ==="
   echo ""
 
-  # Check for uncommitted changes
-  if ! git diff-index --quiet HEAD --; then
-    echo "Error: You have uncommitted changes. Please commit them first."
-    echo ""
-    echo "Uncommitted changes:"
-    git status --short
+  # Check if gh CLI is available
+  if ! command -v gh &> /dev/null; then
+    echo "Error: GitHub CLI (gh) not found. Install it first:"
+    echo "  brew install gh"
     exit 1
   fi
 
-  # Get current branch
-  BRANCH=$(git branch --show-current)
-
-  echo "Pushing to GitHub to trigger build on branch: $BRANCH"
-  git push origin "$BRANCH"
-
-  echo ""
-  echo "✓ Pushed to GitHub!"
-  echo ""
-  echo "GitHub Actions build triggered."
-  echo "Monitor progress: https://github.com/$(git remote get-url origin | sed 's/.*github.*://;s/.git$//')/actions"
-  echo ""
-
-  # Check if gh CLI is available
-  if ! command -v gh &> /dev/null; then
-    echo "GitHub CLI (gh) not found. Install it to auto-download artifacts."
+  # Check if we need to push
+  NEED_PUSH=false
+  if ! git diff-index --quiet HEAD --; then
+    echo "You have uncommitted changes. Commit and push before downloading."
     echo ""
-    echo "Manual download:"
-    echo "  gh run list --limit 1"
-    echo "  gh run download <run-id> -n firmware -D output/github"
-    exit 0
-  fi
-
-  echo "Waiting for build to start..."
-  echo ""
-
-  # Wait a moment for GitHub to register the new workflow run
-  sleep 5
-
-  # Get the latest run ID (should be our new build)
-  LATEST_RUN_ID=$(gh run list --limit 1 --json databaseId --jq '.[0].databaseId')
-
-  echo "Monitoring build (run #$LATEST_RUN_ID)..."
-
-  # Wait for the run to complete
-  while true; do
-    # Try to get status with retry on failure
-    if ! RUN_STATUS=$(gh run view "$LATEST_RUN_ID" --json status --jq '.status' 2>/dev/null); then
-      echo "  Network error - retrying in 5s..."
-      sleep 5
-      continue
-    fi
-
-    if ! RUN_CONCLUSION=$(gh run view "$LATEST_RUN_ID" --json conclusion --jq '.conclusion' 2>/dev/null); then
-      RUN_CONCLUSION="null"
-    fi
-
-    if [ "$RUN_STATUS" = "completed" ]; then
-      if [ "$RUN_CONCLUSION" = "success" ]; then
-        echo "✓ Build completed successfully!"
-        break
-      else
-        echo "✗ Build failed (conclusion: $RUN_CONCLUSION)"
-        echo "Check: https://github.com/$(git remote get-url origin | sed 's/.*github.*://;s/.git$//')/actions/runs/$LATEST_RUN_ID"
-        exit 1
-      fi
-    elif [ "$RUN_STATUS" = "in_progress" ] || [ "$RUN_STATUS" = "queued" ]; then
-      echo "  Status: $RUN_STATUS - waiting..."
-      sleep 10
+    git status --short
+    echo ""
+    read -p "Do you want to commit, push, and wait for build? (y/n): " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      NEED_PUSH=true
     else
-      echo "✗ Unexpected status: $RUN_STATUS"
-      echo "Check: https://github.com/$(git remote get-url origin | sed 's/.*github.*://;s/.git$//')/actions/runs/$LATEST_RUN_ID"
+      echo "Cancelled."
       exit 1
     fi
-  done
-
-  RUN_ID="$LATEST_RUN_ID"
-
-  echo ""
-  echo "Downloading artifacts to output/github/..."
-
-  # Backup existing files if present
-  if [ -d "output/github" ] && [ -n "$(ls -A output/github 2>/dev/null)" ]; then
-    TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-    BACKUP_DIR="output/backups-github/${TIMESTAMP}"
-    mkdir -p "$BACKUP_DIR"
-    echo "Backing up previous GitHub build to $BACKUP_DIR..."
-    mv output/github/* "$BACKUP_DIR/"
-  else
-    mkdir -p output/github
   fi
 
-  # Download to temp directory first
-  TEMP_DIR=$(mktemp -d)
-  gh run download "$RUN_ID" -n firmware -D "$TEMP_DIR"
+  # Check if local is ahead of remote
+  LOCAL_HEAD=$(git rev-parse HEAD)
+  REMOTE_HEAD=$(git rev-parse @{u} 2>/dev/null || echo "")
 
-  # Rename files to match local naming convention
-  echo "Renaming files to match local convention..."
-  mv "$TEMP_DIR/eyeslash_corne_central_dongle_oled.uf2" "output/github/dongle.uf2"
-  mv "$TEMP_DIR/"eyeslash_corne_peripheral_left*".uf2" "output/github/left.uf2"
-  mv "$TEMP_DIR/"eyeslash_corne_peripheral_right*".uf2" "output/github/right.uf2"
+  if [ "$NEED_PUSH" = false ] && [ -n "$REMOTE_HEAD" ] && [ "$LOCAL_HEAD" != "$REMOTE_HEAD" ]; then
+    echo "Local branch is ahead of remote. Push required."
+    NEED_PUSH=true
+  fi
 
-  # Clean up temp directory
-  rm -rf "$TEMP_DIR"
+  if [ "$NEED_PUSH" = true ]; then
+    BRANCH=$(git branch --show-current)
+    echo "Pushing to GitHub to trigger build on branch: $BRANCH"
+    git push origin "$BRANCH"
+    echo ""
+    echo "✓ Pushed to GitHub!"
+    echo ""
+    echo "Waiting for build to start..."
+    sleep 5
+
+    # Get the latest run ID (should be our new build)
+    LATEST_RUN_ID=$(gh run list --limit 1 --json databaseId --jq '.[0].databaseId')
+    echo "Monitoring build (run #$LATEST_RUN_ID)..."
+
+    # Wait for the run to complete
+    while true; do
+      if ! RUN_STATUS=$(gh run view "$LATEST_RUN_ID" --json status --jq '.status' 2>/dev/null); then
+        echo "  Network error - retrying in 5s..."
+        sleep 5
+        continue
+      fi
+
+      if ! RUN_CONCLUSION=$(gh run view "$LATEST_RUN_ID" --json conclusion --jq '.conclusion' 2>/dev/null); then
+        RUN_CONCLUSION="null"
+      fi
+
+      if [ "$RUN_STATUS" = "completed" ]; then
+        if [ "$RUN_CONCLUSION" = "success" ]; then
+          echo "✓ Build completed successfully!"
+          break
+        else
+          echo "✗ Build failed (conclusion: $RUN_CONCLUSION)"
+          echo "Check: https://github.com/$(git remote get-url origin | sed 's/.*github.*://;s/.git$//')/actions/runs/$LATEST_RUN_ID"
+          exit 1
+        fi
+      elif [ "$RUN_STATUS" = "in_progress" ] || [ "$RUN_STATUS" = "queued" ]; then
+        echo "  Status: $RUN_STATUS - waiting..."
+        sleep 10
+      else
+        echo "✗ Unexpected status: $RUN_STATUS"
+        exit 1
+      fi
+    done
+
+    RUN_ID="$LATEST_RUN_ID"
+  else
+    # No push needed, use latest successful run
+    echo "Local is up to date with remote. Using latest successful run."
+    echo ""
+
+    # Get the latest successful run
+    RUN_ID=$(gh run list --limit 5 --json databaseId,status,conclusion --jq '.[] | select(.status == "completed" and .conclusion == "success") | .databaseId' | head -1)
+
+    if [ -z "$RUN_ID" ]; then
+      echo "Error: No successful runs found. Push changes first:"
+      echo "  git push"
+      exit 1
+    fi
+
+    echo "Using run #$RUN_ID"
+  fi
 
   echo ""
-  echo "=== Build Complete! ==="
-  echo "Firmware downloaded to: output/github/"
-  ls -lh output/github/*.uf2
+  echo "Downloading artifacts..."
+
+  # Create clean output directory
+  mkdir -p output/github
+  rm -rf output/github/*
+
+  # Download artifacts
+  gh run download "$RUN_ID" -D output/github/
+
+  # Check what we downloaded
+  echo ""
+  echo "Downloaded files:"
+  ls -lh output/github/
+
+  # Rename files if they're in firmware subdirectory
+  if [ -d "output/github/firmware" ]; then
+    echo ""
+    echo "Renaming files to match local convention..."
+
+    # Find and rename files
+    DONGLE=$(find output/github/firmware -name "*dongle*.uf2" -type f)
+    LEFT=$(find output/github/firmware -name "*left*.uf2" -type f)
+    RIGHT=$(find output/github/firmware -name "*right*.uf2" -type f)
+
+    if [ -n "$DONGLE" ]; then
+      cp "$DONGLE" output/github/dongle.uf2
+    fi
+    if [ -n "$LEFT" ]; then
+      cp "$LEFT" output/github/left.uf2
+    fi
+    if [ -n "$RIGHT" ]; then
+      cp "$RIGHT" output/github/right.uf2
+    fi
+
+    # Keep firmware directory for reference
+    echo "✓ Renamed to: dongle.uf2, left.uf2, right.uf2"
+  fi
+
+  echo ""
+  echo "=== Download Complete! ==="
+  echo "Firmware available at:"
+  ls -lh output/github/*.uf2 2>/dev/null || echo "  output/github/firmware/"
 
   exit 0
 fi
