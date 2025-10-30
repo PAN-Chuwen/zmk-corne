@@ -21,7 +21,8 @@ Custom ZMK firmware configuration for the Eyeslash Corne split keyboard with USB
 │   └── west.yml                 # Dependencies manifest
 │
 ├── build.yaml                    # ⭐ GitHub Actions build matrix
-├── build.sh                      # Local Docker build script
+├── build.sh                      # Local Docker build script (parallel!)
+├── flash.sh                      # Interactive firmware flash tool
 ├── docker-compose.yml            # Docker orchestration for builds
 │
 ├── output/                       # Firmware outputs (gitignored)
@@ -63,21 +64,23 @@ git push
 
 ### 3. Flash Devices
 
-**Enter bootloader**: Double-press RESET button
-
-**Flash firmware**:
+**Interactive flash script (recommended)**:
 ```bash
-# Using latest local builds (recommended)
+./flash.sh
+# Guides you through:
+# - Selecting firmware source (local/github/backup/vendor)
+# - Flashing each device step-by-step
+# - Automatic detection of bootloader mode
+```
+
+**Manual flashing**:
+```bash
+# Enter bootloader: Double-press RESET button
+# Then copy firmware:
 cp output/local/*.uf2 /Volumes/NICENANO/
 
-# OR using GitHub Actions builds
-cp output/github/*.uf2 /Volumes/NICENANO/
-
-# OR rollback to previous build
+# OR rollback to backup
 cp output/backups/20251031_043925/*.uf2 /Volumes/NICENANO/
-
-# OR use vendor stock firmware
-cp vendor/firmware/*.uf2 /Volumes/NICENANO/
 ```
 
 **IMPORTANT**: Flash all 3 devices when updating keymap.
@@ -107,7 +110,8 @@ cp vendor/firmware/*.uf2 /Volumes/NICENANO/
 - `config/eyeslash_corne.keymap` - Edit this for custom keybindings
 - `config/eyeslash_corne.conf` - Display, sleep, Bluetooth settings
 - `build.yaml` - GitHub Actions build matrix
-- `build.sh` - Local build script with automatic backups
+- `build.sh` - Parallel build script with automatic backups
+- `flash.sh` - Interactive firmware flashing tool
 - `docker-compose.yml` - Docker orchestration configuration
 - `vendor/firmware/` - Stock firmware with working LEFT OLED
 
