@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 echo "=== ZMK Corne Firmware Flash Tool ==="
 echo ""
@@ -40,6 +39,9 @@ list_sources() {
   else
     echo "  4) vendor - (not available)"
   fi
+
+  # Settings reset (always available)
+  echo "  5) reset - Settings reset firmware (clears all settings)"
 
   echo ""
 }
@@ -83,7 +85,7 @@ select_backup() {
 # Main menu
 list_sources
 
-read -p "Select firmware source (1-4): " choice
+read -p "Select firmware source (1-5): " choice
 
 case $choice in
   1)
@@ -123,6 +125,28 @@ case $choice in
     LEFT_FILE="$FIRMWARE_SOURCE/eyeslash_corne_peripheral_left_nice_oled.uf2"
     RIGHT_FILE="$FIRMWARE_SOURCE/eyeslash_corne_peripheral_right_nice_oled.uf2"
     echo "Selected: Vendor firmware"
+    ;;
+  5)
+    FIRMWARE_SOURCE="vendor/firmware"
+    RESET_FILE="$FIRMWARE_SOURCE/settings_reset-nice_nano_v2-zmk.uf2"
+
+    if [ ! -f "$RESET_FILE" ]; then
+      echo "Error: Settings reset firmware not found!"
+      exit 1
+    fi
+
+    # For reset, all 3 devices use the same reset firmware
+    DONGLE_FILE="$RESET_FILE"
+    LEFT_FILE="$RESET_FILE"
+    RIGHT_FILE="$RESET_FILE"
+    echo "Selected: Settings reset (will clear all settings)"
+    echo ""
+    echo "WARNING: This will erase all Bluetooth pairings and settings!"
+    read -p "After flashing reset, you MUST flash normal firmware. Continue? (y/N): " confirm
+    if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
+      echo "Aborted."
+      exit 0
+    fi
     ;;
   *)
     echo "Invalid choice!"
@@ -164,7 +188,10 @@ wait_for_device() {
   done
 
   echo "✓ $device_name detected!"
-  sleep 0.5
+
+  # Wait for filesystem to be fully mounted and ready
+  echo "Waiting for device to be ready..."
+  sleep 2
 }
 
 # Function to flash device
@@ -177,16 +204,27 @@ flash_device() {
   wait_for_device "$device_name"
 
   echo "Copying firmware..."
-  cp "$firmware_file" /Volumes/NICENANO/
 
-  echo "Waiting for device to reboot..."
-  # Wait for device to unmount (indicates successful flash)
-  while [ -d "/Volumes/NICENANO" ]; do
+  # Copy firmware - device will disconnect during/after copy (this is normal!)
+  cp "$firmware_file" /Volumes/NICENANO/ 2>/dev/null || true
+
+  echo "Firmware sent - device will now flash and reboot..."
+
+  # Wait for device to disconnect (it will eject itself as it flashes)
+  sleep 1
+  local timeout=0
+  while [ -d "/Volumes/NICENANO" ] && [ $timeout -lt 10 ]; do
     sleep 0.5
+    timeout=$((timeout + 1))
   done
 
-  echo "✓ $device_name flashed successfully!"
-  sleep 1
+  if [ -d "/Volumes/NICENANO" ]; then
+    echo "Note: Device still mounted. This is OK if it's flashing."
+  fi
+
+  echo "✓ $device_name flash initiated!"
+  echo "  (Wait for LED to stop flashing before continuing)"
+  sleep 2
 }
 
 # Flash devices in order
