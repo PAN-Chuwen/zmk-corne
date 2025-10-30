@@ -108,8 +108,8 @@ case $choice in
     FIRMWARE_SOURCE="output/github"
     # GitHub Actions uses different naming
     DONGLE_FILE="$FIRMWARE_SOURCE/eyeslash_corne_central_dongle_oled.uf2"
-    LEFT_FILE="$FIRMWARE_SOURCE/eyeslash_corne_peripheral_left-nice_view_custom.uf2"
-    RIGHT_FILE="$FIRMWARE_SOURCE/eyeslash_corne_peripheral_right-nice_view_custom.uf2"
+    LEFT_FILE="$FIRMWARE_SOURCE/eyeslash_corne_peripheral_left-nice_oled.uf2"
+    RIGHT_FILE="$FIRMWARE_SOURCE/eyeslash_corne_peripheral_right-nice_oled.uf2"
     echo "Selected: GitHub builds"
     ;;
   3)
