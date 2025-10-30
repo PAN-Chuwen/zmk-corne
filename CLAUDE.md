@@ -23,8 +23,9 @@ Custom ZMK firmware configuration for the Eyeslash Corne split keyboard with USB
 ├── build.yaml                    # ⭐ GitHub Actions build matrix
 ├── build-firmware.sh             # Local Docker build script
 │
-├── output/                       # Downloaded firmware (gitignored)
-│   └── *.uf2                     # Built from GitHub Actions
+├── output/                       # Firmware outputs (gitignored)
+│   ├── github/                   # Downloaded from GitHub Actions
+│   └── local/                    # Built by local Docker
 │
 └── vendor/                       # Reference materials (git tracked)
     ├── docs/                     # English documentation from vendor
@@ -46,13 +47,15 @@ vim config/eyeslash_corne.keymap
 git add config/eyeslash_corne.keymap
 git commit -m "feat: update keymap"
 git push
-# Wait ~5 minutes, download from Actions
+# Wait ~2 minutes, download "firmware" artifact
+# Extract to output/github/
 ```
 
 **Option B: Local Docker**
 ```bash
 ./build-firmware.sh
-# Output: build/{left,right,dongle}/zephyr/zmk.uf2
+# Output: output/local/*.uf2
+# Latest builds: output/local/*_latest.uf2
 ```
 
 ### 3. Flash Devices
@@ -61,14 +64,14 @@ git push
 
 **Flash firmware**:
 ```bash
-# Dongle
-cp firmware/eyeslash_corne_central_dongle_oled.uf2 /Volumes/NICENANO/
+# Using GitHub Actions builds
+cp output/github/*.uf2 /Volumes/NICENANO/
 
-# LEFT
-cp firmware/eyeslash_corne_peripheral_left*.uf2 /Volumes/NICENANO/
+# OR using local Docker builds
+cp output/local/*_latest.uf2 /Volumes/NICENANO/
 
-# RIGHT
-cp firmware/eyeslash_corne_peripheral_right*.uf2 /Volumes/NICENANO/
+# OR use vendor stock firmware
+cp vendor/firmware/*.uf2 /Volumes/NICENANO/
 ```
 
 **IMPORTANT**: Flash all 3 devices when updating keymap.

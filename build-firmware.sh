@@ -32,29 +32,29 @@ docker run --rm -v "$(pwd):/workspace" -w /workspace zmkfirmware/zmk-build-arm:s
   "west zephyr-export && west build -s zmk/app -d build/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/config -DSHIELD='eyeslash_corne_peripheral_right nice_view_custom' -DZMK_EXTRA_MODULES=/workspace"
 
 # Create firmware output directory
-mkdir -p firmware-custom
+mkdir -p output/local
 
 # Copy firmware files with timestamps
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 echo ""
 echo "Copying firmware files..."
 
-cp build/dongle/zephyr/zmk.uf2 "firmware-custom/eyeslash_corne_central_dongle_oled_${TIMESTAMP}.uf2"
-cp build/left/zephyr/zmk.uf2 "firmware-custom/eyeslash_corne_peripheral_left_${TIMESTAMP}.uf2"
-cp build/right/zephyr/zmk.uf2 "firmware-custom/eyeslash_corne_peripheral_right_${TIMESTAMP}.uf2"
+cp build/dongle/zephyr/zmk.uf2 "output/local/eyeslash_corne_central_dongle_oled_${TIMESTAMP}.uf2"
+cp build/left/zephyr/zmk.uf2 "output/local/eyeslash_corne_peripheral_left_${TIMESTAMP}.uf2"
+cp build/right/zephyr/zmk.uf2 "output/local/eyeslash_corne_peripheral_right_${TIMESTAMP}.uf2"
 
 # Create latest symlinks
-ln -sf "eyeslash_corne_central_dongle_oled_${TIMESTAMP}.uf2" firmware-custom/eyeslash_corne_central_dongle_oled_latest.uf2
-ln -sf "eyeslash_corne_peripheral_left_${TIMESTAMP}.uf2" firmware-custom/eyeslash_corne_peripheral_left_latest.uf2
-ln -sf "eyeslash_corne_peripheral_right_${TIMESTAMP}.uf2" firmware-custom/eyeslash_corne_peripheral_right_latest.uf2
+ln -sf "eyeslash_corne_central_dongle_oled_${TIMESTAMP}.uf2" output/local/eyeslash_corne_central_dongle_oled_latest.uf2
+ln -sf "eyeslash_corne_peripheral_left_${TIMESTAMP}.uf2" output/local/eyeslash_corne_peripheral_left_latest.uf2
+ln -sf "eyeslash_corne_peripheral_right_${TIMESTAMP}.uf2" output/local/eyeslash_corne_peripheral_right_latest.uf2
 
 echo ""
 echo "=== Build complete! ==="
-echo "DONGLE:  firmware-custom/eyeslash_corne_central_dongle_oled_${TIMESTAMP}.uf2"
-echo "LEFT:    firmware-custom/eyeslash_corne_peripheral_left_${TIMESTAMP}.uf2"
-echo "RIGHT:   firmware-custom/eyeslash_corne_peripheral_right_${TIMESTAMP}.uf2"
+echo "DONGLE:  output/local/eyeslash_corne_central_dongle_oled_${TIMESTAMP}.uf2"
+echo "LEFT:    output/local/eyeslash_corne_peripheral_left_${TIMESTAMP}.uf2"
+echo "RIGHT:   output/local/eyeslash_corne_peripheral_right_${TIMESTAMP}.uf2"
 echo ""
 echo "Latest symlinks:"
-echo "  firmware-custom/eyeslash_corne_central_dongle_oled_latest.uf2"
-echo "  firmware-custom/eyeslash_corne_peripheral_left_latest.uf2"
-echo "  firmware-custom/eyeslash_corne_peripheral_right_latest.uf2"
+echo "  output/local/eyeslash_corne_central_dongle_oled_latest.uf2"
+echo "  output/local/eyeslash_corne_peripheral_left_latest.uf2"
+echo "  output/local/eyeslash_corne_peripheral_right_latest.uf2"

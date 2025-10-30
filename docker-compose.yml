@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  zmk-build:
+    image: zmkfirmware/zmk-build-arm:stable
+    container_name: zmk-corne-builder
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    environment:
+      # Pin exact versions for reproducibility
+      - ZEPHYR_VERSION=4.1.0
+      - ZEPHYR_SDK_VERSION=0.16.9
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+
+  # Optional: Build with specific parameters
+  build-dongle:
+    image: zmkfirmware/zmk-build-arm:stable
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: >
+      bash -c "
+        west zephyr-export &&
+        west build -s zmk/app -d build/dongle -b nice_nano_v2 --
+        -DZMK_CONFIG=/workspace/config
+        -DSHIELD='eyeslash_corne_central_dongle dongle_display'
+        -DZMK_EXTRA_MODULES=/workspace
+      "
+
+  build-left:
+    image: zmkfirmware/zmk-build-arm:stable
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: >
+      bash -c "
+        west zephyr-export &&
+        west build -s zmk/app -d build/left -b nice_nano_v2 --
+        -DZMK_CONFIG=/workspace/config
+        -DSHIELD='eyeslash_corne_peripheral_left nice_view_custom'
+        -DZMK_EXTRA_MODULES=/workspace
+      "
+
+  build-right:
+    image: zmkfirmware/zmk-build-arm:stable
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: >
+      bash -c "
+        west zephyr-export &&
+        west build -s zmk/app -d build/right -b nice_nano_v2 --
+        -DZMK_CONFIG=/workspace/config
+        -DSHIELD='eyeslash_corne_peripheral_right nice_view_custom'
+        -DZMK_EXTRA_MODULES=/workspace
+      "
