@@ -40,9 +40,8 @@ list_sources() {
     echo "  4) vendor - (not available)"
   fi
 
-  # Settings reset (always available)
-  echo "  5) reset - Settings reset firmware (clears all settings)"
-
+  echo ""
+  echo "Note: All options will reset settings first, then flash firmware"
   echo ""
 }
 
@@ -86,7 +85,7 @@ select_backup() {
 list_sources
 
 # Read single character without requiring Enter
-read -n 1 -p "Select firmware source (1-5): " choice
+read -n 1 -p "Select firmware source (1-4): " choice
 echo ""
 
 case $choice in
@@ -127,28 +126,6 @@ case $choice in
     LEFT_FILE="$FIRMWARE_SOURCE/eyeslash_corne_peripheral_left_nice_oled.uf2"
     RIGHT_FILE="$FIRMWARE_SOURCE/eyeslash_corne_peripheral_right_nice_oled.uf2"
     echo "Selected: Vendor firmware"
-    ;;
-  5)
-    FIRMWARE_SOURCE="vendor/firmware"
-    RESET_FILE="$FIRMWARE_SOURCE/settings_reset-nice_nano_v2-zmk.uf2"
-
-    if [ ! -f "$RESET_FILE" ]; then
-      echo "Error: Settings reset firmware not found!"
-      exit 1
-    fi
-
-    # For reset, all 3 devices use the same reset firmware
-    DONGLE_FILE="$RESET_FILE"
-    LEFT_FILE="$RESET_FILE"
-    RIGHT_FILE="$RESET_FILE"
-    echo "Selected: Settings reset (will clear all settings)"
-    echo ""
-    echo "WARNING: This will erase all Bluetooth pairings and settings!"
-    read -p "After flashing reset, you MUST flash normal firmware. Continue? (y/N): " confirm
-    if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
-      echo "Aborted."
-      exit 0
-    fi
     ;;
   *)
     echo "Invalid choice!"
@@ -240,14 +217,32 @@ flash_device() {
   sleep 2
 }
 
-# Flash devices in order
+# Flash devices in order (reset + firmware for each device)
+RESET_FILE="vendor/firmware/settings_reset-nice_nano_v2-zmk.uf2"
+
 echo ""
-echo "Starting flash sequence..."
+echo "=== Flash Sequence: Reset + Firmware for each device ==="
 echo ""
 
-flash_device "DONGLE" "$DONGLE_FILE"
-flash_device "LEFT" "$LEFT_FILE"
-flash_device "RIGHT" "$RIGHT_FILE"
+echo "--- DONGLE ---"
+echo "Resetting settings..."
+flash_device "DONGLE (reset)" "$RESET_FILE"
+echo "Flashing firmware..."
+flash_device "DONGLE (firmware)" "$DONGLE_FILE"
+
+echo ""
+echo "--- LEFT ---"
+echo "Resetting settings..."
+flash_device "LEFT (reset)" "$RESET_FILE"
+echo "Flashing firmware..."
+flash_device "LEFT (firmware)" "$LEFT_FILE"
+
+echo ""
+echo "--- RIGHT ---"
+echo "Resetting settings..."
+flash_device "RIGHT (reset)" "$RESET_FILE"
+echo "Flashing firmware..."
+flash_device "RIGHT (firmware)" "$RIGHT_FILE"
 
 echo ""
 echo "=== All Devices Flashed Successfully! ==="
