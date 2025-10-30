@@ -58,7 +58,7 @@ git push
 ./build.sh
 # Output: output/local/{dongle,left,right}.uf2
 # Backup: output/backups/YYYYMMDD_HHMMSS/
-# ~3-5 minutes first build, ~1 minute with caching
+# ~3-5 minutes first build, ~27 seconds with caching (parallel builds!)
 ```
 
 ### 3. Flash Devices
@@ -88,7 +88,8 @@ cp vendor/firmware/*.uf2 /Volumes/NICENANO/
 - Uses `zmkfirmware/zmk-build-arm:stable` image
 - Named volume `zmk-cache` persists west dependencies (~1GB)
 - Separates west workspace (`/zmk-workspace`) from config (`/workspace`)
-- Command sequence: `west init` → `west update` → `west zephyr-export` → `west build`
+- Command sequence: `west init` → `west update` → `west zephyr-export` → parallel `west build`
+- Builds dongle, left, and right firmware simultaneously for maximum speed
 
 **Automatic Backups**:
 - `./build.sh` backs up existing firmware before each build
@@ -98,8 +99,8 @@ cp vendor/firmware/*.uf2 /Volumes/NICENANO/
 
 **Build Times**:
 - First build: ~3-5 minutes (downloads dependencies)
-- Subsequent builds: ~1 minute (uses cached dependencies)
-- GitHub Actions: ~2 minutes (parallel builds)
+- Subsequent builds: **~27 seconds** (parallel builds with cached dependencies)
+- GitHub Actions: ~2 minutes (parallel builds in cloud)
 
 ## Key Files
 

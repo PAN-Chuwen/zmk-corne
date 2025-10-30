@@ -33,14 +33,21 @@ services:
         echo 'Setting up Zephyr environment...'
         west zephyr-export
         echo ''
-        echo 'Building DONGLE (central)...'
-        west build -s zmk/app -d /workspace/build/dongle -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/config -DSHIELD='eyeslash_corne_central_dongle dongle_display' -DZMK_EXTRA_MODULES=/workspace
+        echo '=== Building all devices in parallel ==='
+        echo 'Starting DONGLE build...'
+        west build -s zmk/app -d /workspace/build/dongle -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/config -DSHIELD='eyeslash_corne_central_dongle dongle_display' -DZMK_EXTRA_MODULES=/workspace > /tmp/dongle.log 2>&1 &
+        DONGLE_PID=$!
+        echo 'Starting LEFT build...'
+        west build -s zmk/app -d /workspace/build/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/config -DSHIELD='eyeslash_corne_peripheral_left nice_view_custom' -DZMK_EXTRA_MODULES=/workspace > /tmp/left.log 2>&1 &
+        LEFT_PID=$!
+        echo 'Starting RIGHT build...'
+        west build -s zmk/app -d /workspace/build/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/config -DSHIELD='eyeslash_corne_peripheral_right nice_view_custom' -DZMK_EXTRA_MODULES=/workspace > /tmp/right.log 2>&1 &
+        RIGHT_PID=$!
         echo ''
-        echo 'Building LEFT (peripheral)...'
-        west build -s zmk/app -d /workspace/build/left -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/config -DSHIELD='eyeslash_corne_peripheral_left nice_view_custom' -DZMK_EXTRA_MODULES=/workspace
-        echo ''
-        echo 'Building RIGHT (peripheral)...'
-        west build -s zmk/app -d /workspace/build/right -b nice_nano_v2 -- -DZMK_CONFIG=/workspace/config -DSHIELD='eyeslash_corne_peripheral_right nice_view_custom' -DZMK_EXTRA_MODULES=/workspace
+        echo 'Waiting for builds to complete...'
+        wait $DONGLE_PID && echo '✓ DONGLE build complete' || (echo '✗ DONGLE build failed' && cat /tmp/dongle.log && exit 1)
+        wait $LEFT_PID && echo '✓ LEFT build complete' || (echo '✗ LEFT build failed' && cat /tmp/left.log && exit 1)
+        wait $RIGHT_PID && echo '✓ RIGHT build complete' || (echo '✗ RIGHT build failed' && cat /tmp/right.log && exit 1)
         echo ''
         echo '=== Build Complete! ==='
         echo 'Outputs in /workspace/build/{dongle,left,right}/zephyr/zmk.uf2'
