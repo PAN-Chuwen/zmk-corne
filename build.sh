@@ -196,45 +196,63 @@ if [ "$USE_GITHUB" = true ]; then
   fi
 
   echo ""
+
+  # Backup existing files if present
+  BACKUP_DIR=""
+  if [ -f "output/github/dongle.uf2" ]; then
+    TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+    BACKUP_DIR="output/backups/github_${TIMESTAMP}"
+
+    if [ "$DRY_RUN" = true ]; then
+      echo "[DRY RUN] Would backup existing files:"
+      ls -lh output/github/*.uf2 2>/dev/null
+      echo ""
+      echo "[DRY RUN] Backup destination: $BACKUP_DIR/"
+      echo "[DRY RUN] Would run: mkdir -p $BACKUP_DIR"
+      echo "[DRY RUN] Would run: mv output/github/*.uf2 $BACKUP_DIR/"
+      echo ""
+    else
+      echo "Backing up previous GitHub firmware..."
+      mkdir -p "$BACKUP_DIR"
+      mv output/github/*.uf2 "$BACKUP_DIR/" 2>/dev/null || true
+      echo "✓ Backed up to $BACKUP_DIR"
+      echo ""
+    fi
+  fi
+
   echo "Downloading artifacts..."
 
   if [ "$DRY_RUN" = true ]; then
-    # Check if existing files would be backed up
-    if [ -d "output/github" ] && [ -n "$(ls -A output/github 2>/dev/null)" ]; then
-      echo "[DRY RUN] Existing files in output/github/ detected:"
-      ls -lh output/github/*.uf2 2>/dev/null || ls -lh output/github/
-      echo ""
-      echo "[DRY RUN] Would be DELETED (no backup):"
-      ls output/github/
-      echo ""
-    fi
-
     echo "[DRY RUN] Would create directory: output/github/"
-    echo "[DRY RUN] Would clear: output/github/*"
     echo "[DRY RUN] Would run: gh run download $RUN_ID -D output/github/"
     echo ""
-    echo "[DRY RUN] Expected output structure after download:"
+    echo "[DRY RUN] Expected download structure:"
     echo "  output/github/firmware/eyeslash_corne_central_dongle_oled.uf2"
     echo "  output/github/firmware/eyeslash_corne_peripheral_left_nice_oled-nice_nano_v2-zmk.uf2"
     echo "  output/github/firmware/eyeslash_corne_peripheral_right_nice_oled-nice_nano_v2-zmk.uf2"
     echo "  output/github/firmware/settings_reset-nice_nano_v2-zmk.uf2"
     echo ""
-    echo "[DRY RUN] Would rename to:"
+    echo "[DRY RUN] Would extract and rename to:"
     echo "  output/github/dongle.uf2"
     echo "  output/github/left.uf2"
     echo "  output/github/right.uf2"
     echo ""
+    echo "[DRY RUN] Would remove: output/github/firmware/"
+    echo ""
     echo "[DRY RUN] Final structure:"
-    echo "  output/github/dongle.uf2    <- Use this for flashing"
-    echo "  output/github/left.uf2      <- Peripheral (no keymap)"
-    echo "  output/github/right.uf2     <- Peripheral (no keymap)"
-    echo "  output/github/firmware/     <- Original files kept for reference"
+    echo "  output/github/dongle.uf2"
+    echo "  output/github/left.uf2"
+    echo "  output/github/right.uf2"
+    if [ -n "$BACKUP_DIR" ]; then
+      echo "  $BACKUP_DIR/dongle.uf2 (backup)"
+      echo "  $BACKUP_DIR/left.uf2 (backup)"
+      echo "  $BACKUP_DIR/right.uf2 (backup)"
+    fi
     echo ""
     echo "=== Dry Run Complete! ==="
   else
-    # Create clean output directory
+    # Create output directory
     mkdir -p output/github
-    rm -rf output/github/*
 
     # Download artifacts
     gh run download "$RUN_ID" -D output/github/
@@ -247,31 +265,36 @@ if [ "$USE_GITHUB" = true ]; then
     # Rename files if they're in firmware subdirectory
     if [ -d "output/github/firmware" ]; then
       echo ""
-      echo "Renaming files to match local convention..."
+      echo "Extracting and renaming files..."
 
-      # Find and rename files
+      # Find and move files
       DONGLE=$(find output/github/firmware -name "*dongle*.uf2" -type f)
       LEFT=$(find output/github/firmware -name "*left*.uf2" -type f)
       RIGHT=$(find output/github/firmware -name "*right*.uf2" -type f)
 
       if [ -n "$DONGLE" ]; then
-        cp "$DONGLE" output/github/dongle.uf2
+        mv "$DONGLE" output/github/dongle.uf2
       fi
       if [ -n "$LEFT" ]; then
-        cp "$LEFT" output/github/left.uf2
+        mv "$LEFT" output/github/left.uf2
       fi
       if [ -n "$RIGHT" ]; then
-        cp "$RIGHT" output/github/right.uf2
+        mv "$RIGHT" output/github/right.uf2
       fi
 
-      # Keep firmware directory for reference
-      echo "✓ Renamed to: dongle.uf2, left.uf2, right.uf2"
+      # Remove firmware directory
+      rm -rf output/github/firmware
+      echo "✓ Extracted to: dongle.uf2, left.uf2, right.uf2"
     fi
 
     echo ""
     echo "=== Download Complete! ==="
-    echo "Firmware available at:"
-    ls -lh output/github/*.uf2 2>/dev/null || echo "  output/github/firmware/"
+    echo "Firmware:"
+    ls -lh output/github/*.uf2
+    if [ -n "$BACKUP_DIR" ]; then
+      echo ""
+      echo "Previous version backed up to: $BACKUP_DIR"
+    fi
   fi
 
   exit 0
