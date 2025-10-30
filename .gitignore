@@ -1,8 +1,12 @@
+# ZMK build artifacts (from west build or GitHub Actions)
 build/
 zmk/
 modules/
 tools/
 .west/
+
+# Downloaded firmware outputs
+output/
 
 # Build logs
 *.log

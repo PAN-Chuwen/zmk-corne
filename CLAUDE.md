@@ -1,6 +1,8 @@
 # ZMK Corne Dongle Configuration
 
-This repository contains custom ZMK firmware configuration for the Eyeslash Corne split keyboard with USB dongle.
+Custom ZMK firmware configuration for the Eyeslash Corne split keyboard with USB dongle.
+
+**Repository**: Forked from [tokyo2006/zmk-corne-dongle](https://github.com/tokyo2006/zmk-corne-dongle)
 
 ## Hardware
 
@@ -12,16 +14,21 @@ This repository contains custom ZMK firmware configuration for the Eyeslash Corn
 
 ```
 ~/zmk-corne-config/
-├── config/
-│   ├── eyeslash_corne.keymap    # Main keymap configuration
-│   ├── eyeslash_corne.conf      # Keyboard settings
-│   └── eyeslash_corne.json      # ZMK Studio config
-├── firmware/                     # Custom-built firmware (from GitHub Actions)
-├── vendor/
-│   ├── docs/                     # Vendor documentation (English)
-│   └── firmware/                 # Vendor stock firmware (nice_oled)
-├── build.yaml                    # GitHub Actions build config
-└── build-firmware.sh             # Local Docker build script
+├── config/                       # ⭐ Edit these for customization
+│   ├── eyeslash_corne.keymap    # Main keymap (layers, keys, behaviors)
+│   ├── eyeslash_corne.conf      # Settings (display, Bluetooth, sleep)
+│   ├── eyeslash_corne.json      # ZMK Studio configuration
+│   └── west.yml                 # Dependencies manifest
+│
+├── build.yaml                    # ⭐ GitHub Actions build matrix
+├── build-firmware.sh             # Local Docker build script
+│
+├── output/                       # Downloaded firmware (gitignored)
+│   └── *.uf2                     # Built from GitHub Actions
+│
+└── vendor/                       # Reference materials (git tracked)
+    ├── docs/                     # English documentation from vendor
+    └── firmware/                 # Stock firmware (nice_oled - LEFT OLED works)
 ```
 
 ## Quick Workflow
