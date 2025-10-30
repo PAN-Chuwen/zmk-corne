@@ -17,8 +17,8 @@ list_sources() {
   fi
 
   # Check GitHub builds
-  if [ -f "output/github/eyeslash_corne_central_dongle_oled.uf2" ]; then
-    github_date=$(stat -f %Sm -t "%Y-%m-%d %H:%M:%S" output/github/eyeslash_corne_central_dongle_oled.uf2)
+  if [ -f "output/github/dongle.uf2" ]; then
+    github_date=$(stat -f %Sm -t "%Y-%m-%d %H:%M:%S" output/github/dongle.uf2)
     echo "  2) github - Latest GitHub Actions build ($github_date)"
   else
     echo "  2) github - (no builds available)"
