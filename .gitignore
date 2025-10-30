@@ -3,3 +3,9 @@ zmk/
 modules/
 tools/
 .west/
+
+# Build logs
+*.log
+
+# macOS files
+.DS_Store
