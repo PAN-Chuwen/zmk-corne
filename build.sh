@@ -1,6 +1,44 @@
 #!/bin/bash
 set -e
 
+# Parse arguments
+USE_GITHUB=false
+if [ "$1" = "--github" ]; then
+  USE_GITHUB=true
+fi
+
+if [ "$USE_GITHUB" = true ]; then
+  echo "=== ZMK Corne Firmware Build (GitHub Actions) ==="
+  echo ""
+
+  # Check for uncommitted changes
+  if ! git diff-index --quiet HEAD --; then
+    echo "Error: You have uncommitted changes. Please commit them first."
+    echo ""
+    echo "Uncommitted changes:"
+    git status --short
+    exit 1
+  fi
+
+  # Get current branch
+  BRANCH=$(git branch --show-current)
+
+  echo "Pushing to GitHub to trigger build on branch: $BRANCH"
+  git push origin "$BRANCH"
+
+  echo ""
+  echo "✓ Pushed to GitHub!"
+  echo ""
+  echo "GitHub Actions build triggered."
+  echo "Monitor progress: https://github.com/$(git remote get-url origin | sed 's/.*github.*://;s/.git$//')/actions"
+  echo ""
+  echo "When complete, download artifacts:"
+  echo "  gh run list --limit 1"
+  echo "  gh run download <run-id> -n firmware -D output/github"
+
+  exit 0
+fi
+
 echo "=== ZMK Corne Firmware Build (Docker Compose) ==="
 echo ""
 
