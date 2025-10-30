@@ -12,4 +12,8 @@ output/
 *.log
 
 # macOS files
-.DS_Storevial.vil
+.DS_Store
+
+# Migration artifacts (temporary)
+migrate_vial_to_zmk.py
+vial.vil
