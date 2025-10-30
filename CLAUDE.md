@@ -35,6 +35,14 @@ Custom ZMK firmware configuration for the Eyeslash Corne split keyboard with USB
     └── firmware/                 # Stock firmware (nice_oled - LEFT OLED works)
 ```
 
+## Python Environment
+
+This project uses Python tools for keymap visualization. Always activate the conda environment first:
+
+```bash
+source ~/.zshrc && conda activate base
+```
+
 ## Quick Workflow
 
 ### 1. Edit Keymap
@@ -121,6 +129,22 @@ cp output/backups/20251031_043925/*.uf2 /Volumes/NICENANO/
 - Custom builds use `nice_view_custom` shield
 - LEFT OLED only works with vendor firmware (`nice_oled` shield)
 - **Workaround**: Use vendor firmware for LEFT, or accept no OLED
+
+## Keymap Visualization
+
+Generate visual diagrams of your keymap using keymap-drawer:
+
+```bash
+# Install (first time only)
+source ~/.zshrc && conda activate base
+pip install keymap-drawer
+
+# Generate visualization
+keymap parse -z config/eyeslash_corne.keymap > keymap.yaml
+keymap draw keymap.yaml > keymap.svg
+```
+
+Output: `keymap.svg` - Visual diagram of all layers
 
 ## Vendor Documentation
 

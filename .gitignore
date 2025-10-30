@@ -17,3 +17,7 @@ output/
 # Migration artifacts (temporary)
 migrate_vial_to_zmk.py
 vial.vil
+
+# Keymap visualization (auto-generated)
+keymap.yaml
+keymap.svg
