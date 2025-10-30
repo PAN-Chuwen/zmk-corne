@@ -85,7 +85,9 @@ select_backup() {
 # Main menu
 list_sources
 
-read -p "Select firmware source (1-5): " choice
+# Read single character without requiring Enter
+read -n 1 -p "Select firmware source (1-5): " choice
+echo ""
 
 case $choice in
   1)
@@ -180,12 +182,23 @@ echo ""
 # Function to wait for device
 wait_for_device() {
   local device_name=$1
-  echo "Waiting for $device_name to enter bootloader..."
-  echo "(Double-press RESET button now)"
+  local max_wait=$2  # Maximum wait time in seconds
 
-  while [ ! -d "/Volumes/NICENANO" ]; do
+  echo "Waiting for $device_name to enter bootloader..."
+  echo "(Double-press RESET button now - will auto-detect)"
+
+  local elapsed=0
+  while [ ! -d "/Volumes/NICENANO" ] && [ $elapsed -lt $max_wait ]; do
     sleep 0.5
+    elapsed=$((elapsed + 1))
   done
+
+  if [ ! -d "/Volumes/NICENANO" ]; then
+    echo ""
+    echo "Device not detected after ${max_wait}s. Retrying..."
+    wait_for_device "$device_name" $max_wait
+    return
+  fi
 
   echo "✓ $device_name detected!"
 
@@ -201,7 +214,7 @@ flash_device() {
 
   echo ""
   echo "--- Flashing $device_name ---"
-  wait_for_device "$device_name"
+  wait_for_device "$device_name" 30
 
   echo "Copying firmware..."
 
@@ -228,13 +241,12 @@ flash_device() {
 }
 
 # Flash devices in order
-read -p "Press Enter to start flashing DONGLE..."
+echo ""
+echo "Starting flash sequence..."
+echo ""
+
 flash_device "DONGLE" "$DONGLE_FILE"
-
-read -p "Press Enter to flash LEFT keyboard..."
 flash_device "LEFT" "$LEFT_FILE"
-
-read -p "Press Enter to flash RIGHT keyboard..."
 flash_device "RIGHT" "$RIGHT_FILE"
 
 echo ""
