@@ -91,8 +91,16 @@ if [ "$USE_GITHUB" = true ]; then
 
   # Wait for the run to complete
   while true; do
-    RUN_STATUS=$(gh run view "$LATEST_RUN_ID" --json status --jq '.status')
-    RUN_CONCLUSION=$(gh run view "$LATEST_RUN_ID" --json conclusion --jq '.conclusion')
+    # Try to get status with retry on failure
+    if ! RUN_STATUS=$(gh run view "$LATEST_RUN_ID" --json status --jq '.status' 2>/dev/null); then
+      echo "  Network error - retrying in 5s..."
+      sleep 5
+      continue
+    fi
+
+    if ! RUN_CONCLUSION=$(gh run view "$LATEST_RUN_ID" --json conclusion --jq '.conclusion' 2>/dev/null); then
+      RUN_CONCLUSION="null"
+    fi
 
     if [ "$RUN_STATUS" = "completed" ]; then
       if [ "$RUN_CONCLUSION" = "success" ]; then
