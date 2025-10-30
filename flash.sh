@@ -123,8 +123,8 @@ case $choice in
     fi
     FIRMWARE_SOURCE="vendor/firmware"
     DONGLE_FILE="$FIRMWARE_SOURCE/eyeslash_corne_central_dongle_oled.uf2"
-    LEFT_FILE="$FIRMWARE_SOURCE/eyeslash_corne_peripheral_left_nice_oled.uf2"
-    RIGHT_FILE="$FIRMWARE_SOURCE/eyeslash_corne_peripheral_right_nice_oled.uf2"
+    LEFT_FILE="$FIRMWARE_SOURCE/eyeslash_corne_peripheral_left nice_oled-nice_nano_v2-zmk.uf2"
+    RIGHT_FILE="$FIRMWARE_SOURCE/eyeslash_corne_peripheral_right nice_oled-nice_nano_v2-zmk.uf2"
     echo "Selected: Vendor firmware"
     ;;
   *)
