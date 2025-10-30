@@ -187,6 +187,16 @@ if [ "$USE_GITHUB" = true ]; then
   echo "Downloading artifacts..."
 
   if [ "$DRY_RUN" = true ]; then
+    # Check if existing files would be backed up
+    if [ -d "output/github" ] && [ -n "$(ls -A output/github 2>/dev/null)" ]; then
+      echo "[DRY RUN] Existing files in output/github/ detected:"
+      ls -lh output/github/*.uf2 2>/dev/null || ls -lh output/github/
+      echo ""
+      echo "[DRY RUN] Would be DELETED (no backup):"
+      ls output/github/
+      echo ""
+    fi
+
     echo "[DRY RUN] Would create directory: output/github/"
     echo "[DRY RUN] Would clear: output/github/*"
     echo "[DRY RUN] Would run: gh run download $RUN_ID -D output/github/"
@@ -201,6 +211,12 @@ if [ "$USE_GITHUB" = true ]; then
     echo "  output/github/dongle.uf2"
     echo "  output/github/left.uf2"
     echo "  output/github/right.uf2"
+    echo ""
+    echo "[DRY RUN] Final structure:"
+    echo "  output/github/dongle.uf2    <- Use this for flashing"
+    echo "  output/github/left.uf2      <- Peripheral (no keymap)"
+    echo "  output/github/right.uf2     <- Peripheral (no keymap)"
+    echo "  output/github/firmware/     <- Original files kept for reference"
     echo ""
     echo "=== Dry Run Complete! ==="
   else
