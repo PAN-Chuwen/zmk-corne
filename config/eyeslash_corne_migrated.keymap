@@ -1,0 +1,103 @@
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1200
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 25
+
+#include <input/processors.dtsi>
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/ext_power.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/pointing.h>
+#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/rgb.h>
+
+&mmv_input_listener { input-processors = <&zip_xy_scaler 2 1>; };
+&msc_input_listener { input-processors = <&zip_scroll_scaler 2 1>; };
+
+&msc {
+    acceleration-exponent = <1>;
+    time-to-max-speed-ms = <100>;
+    delay-ms = <0>;
+};
+
+&mmv {
+    time-to-max-speed-ms = <500>;
+    acceleration-exponent = <1>;
+    trigger-period-ms = <16>;
+};
+
+/ {
+    behaviors {
+        td0: td0 {
+            compatible = "zmk,behavior-tap-dance";
+            display-name = "Shift/Layer2";
+            #binding-cells = <0>;
+            bindings = <&sk LSHIFT>, <&mo 2>;
+        };
+    };
+
+    rgb_encoder: rgb_encoder {
+        compatible = "zmk,behavior-sensor-rotate";
+        #sensor-binding-cells = <0>;
+        bindings = <&rgb_ug RGB_BRI>, <&rgb_ug RGB_BRD>;
+    };
+
+    scroll_encoder: scroll_encoder {
+        compatible = "zmk,behavior-sensor-rotate";
+        #sensor-binding-cells = <0>;
+        bindings = <&msc SCRL_DOWN>, <&msc SCRL_UP>;
+        tap-ms = <100>;
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            display-name = "QWERTY";
+            bindings = <
+// Row 0: LEFT (6 keys) + CENTER (1 key) + RIGHT (6 keys)
+&kp GRAVE  &kp Q  &kp W  &kp E     &kp R      &kp T                       &kp UP          &kp Y  &kp U      &kp I     &kp O     &kp P     &kp BSPC
+// Row 1: LEFT (6 keys) + CENTER (3 keys) + RIGHT (6 keys)
+&kp LSHIFT &kp A  &kp S  &kp D     &kp F      &kp G           &kp LEFT    &kp ENTER  &kp RIGHT  &kp H  &kp J      &kp K     &kp L     &kp SEMI  &kp SQT
+// Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
+&kp CAPS   &kp Z  &kp X  &kp C     &kp V      &kp B  &kp SPACE            &kp DOWN                  &kp N  &kp M      &kp COMMA &kp DOT   &kp FSLH  &kp ESC
+// Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
+                         &kp LGUI  &kp SPACE  &kp ENTER                                     &td0   &mo 1  &kp BSPC
+            >;
+            sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOLUME_DOWN>;
+        };
+
+        lower_layer {
+            display-name = "NUMBER";
+            bindings = <
+&kp GRAVE  &kp QMARK  &kp DOT    &kp LPAR   &kp LBRC   &kp LCTRL                              &mmv MOVE_UP                     &none    &kp N1  &kp N2  &kp N3     &none    &none    &kp BSPC
+&kp LSHIFT &kp UNDER  &kp COLON  &kp DQT    &kp COMMA  &kp EQUAL            &mmv MOVE_LEFT    &mkp LCLK   &mmv MOVE_RIGHT    &kp LALT &kp N4  &kp N5  &kp N6     &kp N7   &kp N0   &kp RALT
+&kp LSHIFT &kp PIPE   &kp LBKT   &kp PLUS   &kp MINUS  &kp FSLH   &trans                      &mmv MOVE_DOWN                   &none    &kp LT  &kp N8  &kp N9     &kp N0   &kp GT   &kp RSHIFT
+                                  &kp LGUI   &kp SPACE  &kp ENTER                                                              &none    &none   &kp BSPC
+            >;
+            sensor-bindings = <&scroll_encoder>;
+        };
+
+        raise_layer {
+            display-name = "NAV";
+            bindings = <
+&kp TAB    &none      &none         &none         &kp LALT   &none                                  &mmv MOVE_UP                     &none       &none    &kp LEFT   &kp UP      &kp ENTER  &none       &none
+&kp LSHIFT &kp LCTRL  &none         &none         &none      &kp LGUI            &mmv MOVE_LEFT     &mkp LCLK   &mmv MOVE_RIGHT    &kp LALT    &none    &kp LEFT   &kp UP      &kp RIGHT  &kp HOME    &kp F12
+&kp LSHIFT &none      &none         &none         &none      &none     &trans                       &mmv MOVE_DOWN                   &none       &none    &kp END    &kp PG_DN   &kp RIGHT  &none       &kp RSHIFT
+                                    &none         &mkp LCLK  &mkp RCLK                                                              &none       &trans   &kp ENTER
+            >;
+            sensor-bindings = <&scroll_encoder>;
+        };
+
+        layer_3 {
+            display-name = "Fn";
+            bindings = <
+&studio_unlock &kp F1      &kp F2      &kp F3       &kp F4     &kp F5                                  &mmv MOVE_UP                     &kp F6       &kp F7     &kp F8       &kp F9      &kp F10          &kp F11
+&trans         &trans      &mkp LCLK   &mkp MCLK    &mkp RCLK  &mkp MB4                &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &bootloader  &mkp LCLK  &mkp MCLK    &mkp RCLK   &kp PRINTSCREEN  &kp F12
+&trans         &sys_reset  &trans      &bootloader  &trans     &mkp MB5  &kp C_MUTE                    &mmv MOVE_DOWN                   &trans       &trans     &bootloader  &sys_reset  &kp SCROLLLOCK   &kp PAUSE_BREAK
+                                       &trans       &trans     &trans                                                                    &trans       &trans     &trans
+            >;
+            sensor-bindings = <&scroll_encoder>;
+        };
+    };
+};
