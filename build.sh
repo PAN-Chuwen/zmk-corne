@@ -1,10 +1,45 @@
 #!/bin/bash
 set -e
 
+# Show help
+show_help() {
+  cat << EOF
+ZMK Corne Firmware Build Script
+
+Usage: ./build.sh [OPTIONS]
+
+Options:
+  --github    Push to GitHub and trigger GitHub Actions build
+              Outputs will be available as artifacts to download to output/github/
+
+  --help      Show this help message
+
+  (no flags)  Build locally using Docker (default)
+              Outputs to output/local/ with automatic backups
+
+Examples:
+  ./build.sh              # Local Docker build
+  ./build.sh --github     # GitHub Actions build
+
+Output Structure:
+  output/local/           Latest local Docker builds (consistent names)
+  output/github/          GitHub Actions builds (download artifacts here)
+  output/backups/         Timestamped backup history
+
+EOF
+  exit 0
+}
+
 # Parse arguments
 USE_GITHUB=false
-if [ "$1" = "--github" ]; then
+if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+  show_help
+elif [ "$1" = "--github" ]; then
   USE_GITHUB=true
+elif [ -n "$1" ]; then
+  echo "Error: Unknown option '$1'"
+  echo "Run './build.sh --help' for usage information"
+  exit 1
 fi
 
 if [ "$USE_GITHUB" = true ]; then
