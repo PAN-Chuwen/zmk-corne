@@ -21,28 +21,36 @@ rm -rf build/dongle build/left build/right
 echo ""
 docker-compose run --rm build-all
 
-# Create output directory and copy files
+# Create output directories
 mkdir -p output/local
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
+# Backup existing firmware if present
+if [ -f "output/local/dongle.uf2" ]; then
+  echo ""
+  echo "Backing up previous firmware..."
+  BACKUP_DIR="output/backups/$(stat -f %Sm -t %Y%m%d_%H%M%S output/local/dongle.uf2)"
+  mkdir -p "$BACKUP_DIR"
+  mv output/local/dongle.uf2 "$BACKUP_DIR/"
+  mv output/local/left.uf2 "$BACKUP_DIR/"
+  mv output/local/right.uf2 "$BACKUP_DIR/"
+  echo "✓ Backed up to $BACKUP_DIR"
+fi
+
 echo ""
 echo "Copying firmware to output/local/..."
-cp build/dongle/zephyr/zmk.uf2 "output/local/eyeslash_corne_central_dongle_oled_${TIMESTAMP}.uf2"
-cp build/left/zephyr/zmk.uf2 "output/local/eyeslash_corne_peripheral_left_${TIMESTAMP}.uf2"
-cp build/right/zephyr/zmk.uf2 "output/local/eyeslash_corne_peripheral_right_${TIMESTAMP}.uf2"
+cp build/dongle/zephyr/zmk.uf2 "output/local/dongle.uf2"
+cp build/left/zephyr/zmk.uf2 "output/local/left.uf2"
+cp build/right/zephyr/zmk.uf2 "output/local/right.uf2"
 
-# Create latest symlinks
-ln -sf "eyeslash_corne_central_dongle_oled_${TIMESTAMP}.uf2" output/local/eyeslash_corne_central_dongle_oled_latest.uf2
-ln -sf "eyeslash_corne_peripheral_left_${TIMESTAMP}.uf2" output/local/eyeslash_corne_peripheral_left_latest.uf2
-ln -sf "eyeslash_corne_peripheral_right_${TIMESTAMP}.uf2" output/local/eyeslash_corne_peripheral_right_latest.uf2
+# Also save timestamped copy in backups
+BACKUP_DIR="output/backups/${TIMESTAMP}"
+mkdir -p "$BACKUP_DIR"
+cp output/local/dongle.uf2 "$BACKUP_DIR/"
+cp output/local/left.uf2 "$BACKUP_DIR/"
+cp output/local/right.uf2 "$BACKUP_DIR/"
 
 echo ""
 echo "=== Build Complete! ==="
-echo "DONGLE:  output/local/eyeslash_corne_central_dongle_oled_${TIMESTAMP}.uf2"
-echo "LEFT:    output/local/eyeslash_corne_peripheral_left_${TIMESTAMP}.uf2"
-echo "RIGHT:   output/local/eyeslash_corne_peripheral_right_${TIMESTAMP}.uf2"
-echo ""
-echo "Latest symlinks:"
-echo "  output/local/eyeslash_corne_central_dongle_oled_latest.uf2"
-echo "  output/local/eyeslash_corne_peripheral_left_latest.uf2"
-echo "  output/local/eyeslash_corne_peripheral_right_latest.uf2"
+echo "Firmware:        output/local/{dongle,left,right}.uf2"
+echo "Backup saved to: $BACKUP_DIR"
