@@ -67,9 +67,47 @@ if [ "$USE_GITHUB" = true ]; then
   echo "GitHub Actions build triggered."
   echo "Monitor progress: https://github.com/$(git remote get-url origin | sed 's/.*github.*://;s/.git$//')/actions"
   echo ""
-  echo "When complete, download artifacts:"
-  echo "  gh run list --limit 1"
-  echo "  gh run download <run-id> -n firmware -D output/github"
+
+  # Check if gh CLI is available
+  if ! command -v gh &> /dev/null; then
+    echo "GitHub CLI (gh) not found. Install it to auto-download artifacts."
+    echo ""
+    echo "Manual download:"
+    echo "  gh run list --limit 1"
+    echo "  gh run download <run-id> -n firmware -D output/github"
+    exit 0
+  fi
+
+  echo "Waiting for build to complete..."
+  echo ""
+
+  # Wait for the latest run to complete
+  while true; do
+    RUN_STATUS=$(gh run list --limit 1 --json status --jq '.[0].status')
+    RUN_ID=$(gh run list --limit 1 --json databaseId --jq '.[0].databaseId')
+
+    if [ "$RUN_STATUS" = "completed" ]; then
+      echo "✓ Build completed!"
+      break
+    elif [ "$RUN_STATUS" = "in_progress" ] || [ "$RUN_STATUS" = "queued" ]; then
+      echo "  Status: $RUN_STATUS (run #$RUN_ID) - waiting..."
+      sleep 10
+    else
+      echo "✗ Build failed or cancelled (status: $RUN_STATUS)"
+      echo "Check: https://github.com/$(git remote get-url origin | sed 's/.*github.*://;s/.git$//')/actions/runs/$RUN_ID"
+      exit 1
+    fi
+  done
+
+  echo ""
+  echo "Downloading artifacts to output/github/..."
+  mkdir -p output/github
+  gh run download "$RUN_ID" -n firmware -D output/github
+
+  echo ""
+  echo "=== Build Complete! ==="
+  echo "Firmware downloaded to: output/github/"
+  ls -lh output/github/*.uf2
 
   exit 0
 fi
