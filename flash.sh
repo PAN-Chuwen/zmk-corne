@@ -101,15 +101,14 @@ case $choice in
     echo "Selected: Local builds"
     ;;
   2)
-    if [ ! -f "output/github/eyeslash_corne_central_dongle_oled.uf2" ]; then
-      echo "Error: No GitHub builds available. Download firmware artifact from Actions."
+    if [ ! -f "output/github/dongle.uf2" ]; then
+      echo "Error: No GitHub builds available. Run './build.sh --github' first."
       exit 1
     fi
     FIRMWARE_SOURCE="output/github"
-    # GitHub Actions uses different naming
-    DONGLE_FILE="$FIRMWARE_SOURCE/eyeslash_corne_central_dongle_oled.uf2"
-    LEFT_FILE="$FIRMWARE_SOURCE/eyeslash_corne_peripheral_left-nice_view_custom.uf2"
-    RIGHT_FILE="$FIRMWARE_SOURCE/eyeslash_corne_peripheral_right-nice_view_custom.uf2"
+    DONGLE_FILE="$FIRMWARE_SOURCE/dongle.uf2"
+    LEFT_FILE="$FIRMWARE_SOURCE/left.uf2"
+    RIGHT_FILE="$FIRMWARE_SOURCE/right.uf2"
     echo "Selected: GitHub builds"
     ;;
   3)

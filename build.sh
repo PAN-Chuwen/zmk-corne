@@ -78,26 +78,42 @@ if [ "$USE_GITHUB" = true ]; then
     exit 0
   fi
 
-  echo "Waiting for build to complete..."
+  echo "Waiting for build to start..."
   echo ""
 
-  # Wait for the latest run to complete
+  # Wait a moment for GitHub to register the new workflow run
+  sleep 5
+
+  # Get the latest run ID (should be our new build)
+  LATEST_RUN_ID=$(gh run list --limit 1 --json databaseId --jq '.[0].databaseId')
+
+  echo "Monitoring build (run #$LATEST_RUN_ID)..."
+
+  # Wait for the run to complete
   while true; do
-    RUN_STATUS=$(gh run list --limit 1 --json status --jq '.[0].status')
-    RUN_ID=$(gh run list --limit 1 --json databaseId --jq '.[0].databaseId')
+    RUN_STATUS=$(gh run view "$LATEST_RUN_ID" --json status --jq '.status')
+    RUN_CONCLUSION=$(gh run view "$LATEST_RUN_ID" --json conclusion --jq '.conclusion')
 
     if [ "$RUN_STATUS" = "completed" ]; then
-      echo "✓ Build completed!"
-      break
+      if [ "$RUN_CONCLUSION" = "success" ]; then
+        echo "✓ Build completed successfully!"
+        break
+      else
+        echo "✗ Build failed (conclusion: $RUN_CONCLUSION)"
+        echo "Check: https://github.com/$(git remote get-url origin | sed 's/.*github.*://;s/.git$//')/actions/runs/$LATEST_RUN_ID"
+        exit 1
+      fi
     elif [ "$RUN_STATUS" = "in_progress" ] || [ "$RUN_STATUS" = "queued" ]; then
-      echo "  Status: $RUN_STATUS (run #$RUN_ID) - waiting..."
+      echo "  Status: $RUN_STATUS - waiting..."
       sleep 10
     else
-      echo "✗ Build failed or cancelled (status: $RUN_STATUS)"
-      echo "Check: https://github.com/$(git remote get-url origin | sed 's/.*github.*://;s/.git$//')/actions/runs/$RUN_ID"
+      echo "✗ Unexpected status: $RUN_STATUS"
+      echo "Check: https://github.com/$(git remote get-url origin | sed 's/.*github.*://;s/.git$//')/actions/runs/$LATEST_RUN_ID"
       exit 1
     fi
   done
+
+  RUN_ID="$LATEST_RUN_ID"
 
   echo ""
   echo "Downloading artifacts to output/github/..."
@@ -105,7 +121,7 @@ if [ "$USE_GITHUB" = true ]; then
   # Backup existing files if present
   if [ -d "output/github" ] && [ -n "$(ls -A output/github 2>/dev/null)" ]; then
     TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-    BACKUP_DIR="output/backups/github_${TIMESTAMP}"
+    BACKUP_DIR="output/backups-github/${TIMESTAMP}"
     mkdir -p "$BACKUP_DIR"
     echo "Backing up previous GitHub build to $BACKUP_DIR..."
     mv output/github/* "$BACKUP_DIR/"
@@ -113,7 +129,18 @@ if [ "$USE_GITHUB" = true ]; then
     mkdir -p output/github
   fi
 
-  gh run download "$RUN_ID" -n firmware -D output/github
+  # Download to temp directory first
+  TEMP_DIR=$(mktemp -d)
+  gh run download "$RUN_ID" -n firmware -D "$TEMP_DIR"
+
+  # Rename files to match local naming convention
+  echo "Renaming files to match local convention..."
+  mv "$TEMP_DIR/eyeslash_corne_central_dongle_oled.uf2" "output/github/dongle.uf2"
+  mv "$TEMP_DIR/"eyeslash_corne_peripheral_left*".uf2" "output/github/left.uf2"
+  mv "$TEMP_DIR/"eyeslash_corne_peripheral_right*".uf2" "output/github/right.uf2"
+
+  # Clean up temp directory
+  rm -rf "$TEMP_DIR"
 
   echo ""
   echo "=== Build Complete! ==="
