@@ -101,7 +101,18 @@ if [ "$USE_GITHUB" = true ]; then
 
   echo ""
   echo "Downloading artifacts to output/github/..."
-  mkdir -p output/github
+
+  # Backup existing files if present
+  if [ -d "output/github" ] && [ -n "$(ls -A output/github 2>/dev/null)" ]; then
+    TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+    BACKUP_DIR="output/backups/github_${TIMESTAMP}"
+    mkdir -p "$BACKUP_DIR"
+    echo "Backing up previous GitHub build to $BACKUP_DIR..."
+    mv output/github/* "$BACKUP_DIR/"
+  else
+    mkdir -p output/github
+  fi
+
   gh run download "$RUN_ID" -n firmware -D output/github
 
   echo ""
