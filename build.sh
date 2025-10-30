@@ -115,72 +115,84 @@ if [ "$USE_GITHUB" = true ]; then
     fi
   fi
 
-  if [ "$NEED_PUSH" = true ]; then
-    BRANCH=$(git branch --show-current)
-
-    if [ "$DRY_RUN" = true ]; then
+  if [ "$DRY_RUN" = true ]; then
+    # Dry run mode - just mock everything
+    if [ "$NEED_PUSH" = true ]; then
+      BRANCH=$(git branch --show-current)
       echo "[DRY RUN] Would push to GitHub branch: $BRANCH"
       echo "[DRY RUN] Would run: git push origin $BRANCH"
+      echo ""
+      echo "[DRY RUN] Would wait for GitHub Actions build to complete..."
+      echo "[DRY RUN] Assuming build succeeds..."
+      RUN_ID="MOCK_RUN_ID"
     else
+      echo "[DRY RUN] Local is up to date with remote."
+      echo "[DRY RUN] Would use latest successful run from GitHub"
+      RUN_ID="MOCK_RUN_ID"
+    fi
+  else
+    # Real execution
+    if [ "$NEED_PUSH" = true ]; then
+      BRANCH=$(git branch --show-current)
       echo "Pushing to GitHub to trigger build on branch: $BRANCH"
       git push origin "$BRANCH"
-    fi
-    echo ""
-    echo "✓ Pushed to GitHub!"
-    echo ""
-    echo "Waiting for build to start..."
-    sleep 5
+      echo ""
+      echo "✓ Pushed to GitHub!"
+      echo ""
+      echo "Waiting for build to start..."
+      sleep 5
 
-    # Get the latest run ID (should be our new build)
-    LATEST_RUN_ID=$(gh run list --limit 1 --json databaseId --jq '.[0].databaseId')
-    echo "Monitoring build (run #$LATEST_RUN_ID)..."
+      # Get the latest run ID (should be our new build)
+      LATEST_RUN_ID=$(gh run list --limit 1 --json databaseId --jq '.[0].databaseId')
+      echo "Monitoring build (run #$LATEST_RUN_ID)..."
 
-    # Wait for the run to complete
-    while true; do
-      if ! RUN_STATUS=$(gh run view "$LATEST_RUN_ID" --json status --jq '.status' 2>/dev/null); then
-        echo "  Network error - retrying in 5s..."
-        sleep 5
-        continue
-      fi
+      # Wait for the run to complete
+      while true; do
+        if ! RUN_STATUS=$(gh run view "$LATEST_RUN_ID" --json status --jq '.status' 2>/dev/null); then
+          echo "  Network error - retrying in 5s..."
+          sleep 5
+          continue
+        fi
 
-      if ! RUN_CONCLUSION=$(gh run view "$LATEST_RUN_ID" --json conclusion --jq '.conclusion' 2>/dev/null); then
-        RUN_CONCLUSION="null"
-      fi
+        if ! RUN_CONCLUSION=$(gh run view "$LATEST_RUN_ID" --json conclusion --jq '.conclusion' 2>/dev/null); then
+          RUN_CONCLUSION="null"
+        fi
 
-      if [ "$RUN_STATUS" = "completed" ]; then
-        if [ "$RUN_CONCLUSION" = "success" ]; then
-          echo "✓ Build completed successfully!"
-          break
+        if [ "$RUN_STATUS" = "completed" ]; then
+          if [ "$RUN_CONCLUSION" = "success" ]; then
+            echo "✓ Build completed successfully!"
+            break
+          else
+            echo "✗ Build failed (conclusion: $RUN_CONCLUSION)"
+            echo "Check: https://github.com/$(git remote get-url origin | sed 's/.*github.*://;s/.git$//')/actions/runs/$LATEST_RUN_ID"
+            exit 1
+          fi
+        elif [ "$RUN_STATUS" = "in_progress" ] || [ "$RUN_STATUS" = "queued" ]; then
+          echo "  Status: $RUN_STATUS - waiting..."
+          sleep 10
         else
-          echo "✗ Build failed (conclusion: $RUN_CONCLUSION)"
-          echo "Check: https://github.com/$(git remote get-url origin | sed 's/.*github.*://;s/.git$//')/actions/runs/$LATEST_RUN_ID"
+          echo "✗ Unexpected status: $RUN_STATUS"
           exit 1
         fi
-      elif [ "$RUN_STATUS" = "in_progress" ] || [ "$RUN_STATUS" = "queued" ]; then
-        echo "  Status: $RUN_STATUS - waiting..."
-        sleep 10
-      else
-        echo "✗ Unexpected status: $RUN_STATUS"
+      done
+
+      RUN_ID="$LATEST_RUN_ID"
+    else
+      # No push needed, use latest successful run
+      echo "Local is up to date with remote. Using latest successful run."
+      echo ""
+
+      # Get the latest successful run
+      RUN_ID=$(gh run list --limit 5 --json databaseId,status,conclusion --jq '.[] | select(.status == "completed" and .conclusion == "success") | .databaseId' | head -1)
+
+      if [ -z "$RUN_ID" ]; then
+        echo "Error: No successful runs found. Push changes first:"
+        echo "  git push"
         exit 1
       fi
-    done
 
-    RUN_ID="$LATEST_RUN_ID"
-  else
-    # No push needed, use latest successful run
-    echo "Local is up to date with remote. Using latest successful run."
-    echo ""
-
-    # Get the latest successful run
-    RUN_ID=$(gh run list --limit 5 --json databaseId,status,conclusion --jq '.[] | select(.status == "completed" and .conclusion == "success") | .databaseId' | head -1)
-
-    if [ -z "$RUN_ID" ]; then
-      echo "Error: No successful runs found. Push changes first:"
-      echo "  git push"
-      exit 1
+      echo "Using run #$RUN_ID"
     fi
-
-    echo "Using run #$RUN_ID"
   fi
 
   echo ""
