@@ -169,10 +169,10 @@ else
   echo "✓ ZMK build image found locally"
 fi
 
-# Clean only build output (keep zmk/ modules/ for caching)
+# Clean build output completely (CMake cache causes issues when changing shields)
 echo ""
 echo "Cleaning build output..."
-rm -rf build/dongle build/left build/right
+rm -rf build/
 
 # Run docker-compose build
 echo ""
