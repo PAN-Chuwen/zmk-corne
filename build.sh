@@ -9,17 +9,23 @@ ZMK Corne Firmware Build Script
 Usage: ./build.sh [OPTIONS]
 
 Options:
-  --github    Push to GitHub and trigger GitHub Actions build
-              Outputs will be available as artifacts to download to output/github/
+  --github         Download from latest successful GitHub Actions build
+                   Outputs will be downloaded to output/github/
 
-  --help      Show this help message
+  --github --push  Push to GitHub, trigger build, and download when complete
 
-  (no flags)  Build locally using Docker (default)
-              Outputs to output/local/ with automatic backups
+  --dry-run        Show what would happen without executing
+
+  --help           Show this help message
+
+  (no flags)       Build locally using Docker (default)
+                   Outputs to output/local/ with automatic backups
 
 Examples:
-  ./build.sh              # Local Docker build
-  ./build.sh --github     # GitHub Actions build
+  ./build.sh                  # Local Docker build
+  ./build.sh --dry-run        # Preview local build actions
+  ./build.sh --github         # Download from latest GitHub build (no push)
+  ./build.sh --github --push --dry-run  # Preview push and build
 
 Output Structure:
   output/local/           Latest local Docker builds (consistent names)
@@ -32,18 +38,40 @@ EOF
 
 # Parse arguments
 USE_GITHUB=false
-if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
-  show_help
-elif [ "$1" = "--github" ]; then
-  USE_GITHUB=true
-elif [ -n "$1" ]; then
-  echo "Error: Unknown option '$1'"
-  echo "Run './build.sh --help' for usage information"
-  exit 1
-fi
+ALLOW_PUSH=false
+DRY_RUN=false
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --help|-h)
+      show_help
+      ;;
+    --github)
+      USE_GITHUB=true
+      shift
+      ;;
+    --push)
+      ALLOW_PUSH=true
+      shift
+      ;;
+    --dry-run)
+      DRY_RUN=true
+      shift
+      ;;
+    *)
+      echo "Error: Unknown option '$1'"
+      echo "Run './build.sh --help' for usage information"
+      exit 1
+      ;;
+  esac
+done
 
 if [ "$USE_GITHUB" = true ]; then
-  echo "=== ZMK Corne Firmware Build (GitHub Actions) ==="
+  if [ "$DRY_RUN" = true ]; then
+    echo "=== ZMK Corne Firmware Build (GitHub Actions) [DRY RUN] ==="
+  else
+    echo "=== ZMK Corne Firmware Build (GitHub Actions) ==="
+  fi
   echo ""
 
   # Check if gh CLI is available
@@ -56,16 +84,18 @@ if [ "$USE_GITHUB" = true ]; then
   # Check if we need to push
   NEED_PUSH=false
   if ! git diff-index --quiet HEAD --; then
-    echo "You have uncommitted changes. Commit and push before downloading."
+    echo "You have uncommitted changes:"
     echo ""
     git status --short
     echo ""
-    read -p "Do you want to commit, push, and wait for build? (y/n): " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
+
+    if [ "$ALLOW_PUSH" = true ]; then
       NEED_PUSH=true
+      echo "Will commit and push changes (--push flag provided)"
     else
-      echo "Cancelled."
+      echo "Error: Uncommitted changes detected. Options:"
+      echo "  1. Commit changes and use --github --push to trigger new build"
+      echo "  2. Discard changes and use --github to download latest build"
       exit 1
     fi
   fi
@@ -75,14 +105,26 @@ if [ "$USE_GITHUB" = true ]; then
   REMOTE_HEAD=$(git rev-parse @{u} 2>/dev/null || echo "")
 
   if [ "$NEED_PUSH" = false ] && [ -n "$REMOTE_HEAD" ] && [ "$LOCAL_HEAD" != "$REMOTE_HEAD" ]; then
-    echo "Local branch is ahead of remote. Push required."
-    NEED_PUSH=true
+    if [ "$ALLOW_PUSH" = true ]; then
+      echo "Local branch is ahead of remote. Push required."
+      NEED_PUSH=true
+    else
+      echo "Error: Local branch is ahead of remote. Use --push to trigger build:"
+      echo "  ./build.sh --github --push"
+      exit 1
+    fi
   fi
 
   if [ "$NEED_PUSH" = true ]; then
     BRANCH=$(git branch --show-current)
-    echo "Pushing to GitHub to trigger build on branch: $BRANCH"
-    git push origin "$BRANCH"
+
+    if [ "$DRY_RUN" = true ]; then
+      echo "[DRY RUN] Would push to GitHub branch: $BRANCH"
+      echo "[DRY RUN] Would run: git push origin $BRANCH"
+    else
+      echo "Pushing to GitHub to trigger build on branch: $BRANCH"
+      git push origin "$BRANCH"
+    fi
     echo ""
     echo "✓ Pushed to GitHub!"
     echo ""
@@ -144,46 +186,65 @@ if [ "$USE_GITHUB" = true ]; then
   echo ""
   echo "Downloading artifacts..."
 
-  # Create clean output directory
-  mkdir -p output/github
-  rm -rf output/github/*
-
-  # Download artifacts
-  gh run download "$RUN_ID" -D output/github/
-
-  # Check what we downloaded
-  echo ""
-  echo "Downloaded files:"
-  ls -lh output/github/
-
-  # Rename files if they're in firmware subdirectory
-  if [ -d "output/github/firmware" ]; then
+  if [ "$DRY_RUN" = true ]; then
+    echo "[DRY RUN] Would create directory: output/github/"
+    echo "[DRY RUN] Would clear: output/github/*"
+    echo "[DRY RUN] Would run: gh run download $RUN_ID -D output/github/"
     echo ""
-    echo "Renaming files to match local convention..."
+    echo "[DRY RUN] Expected output structure after download:"
+    echo "  output/github/firmware/eyeslash_corne_central_dongle_oled.uf2"
+    echo "  output/github/firmware/eyeslash_corne_peripheral_left_nice_oled-nice_nano_v2-zmk.uf2"
+    echo "  output/github/firmware/eyeslash_corne_peripheral_right_nice_oled-nice_nano_v2-zmk.uf2"
+    echo "  output/github/firmware/settings_reset-nice_nano_v2-zmk.uf2"
+    echo ""
+    echo "[DRY RUN] Would rename to:"
+    echo "  output/github/dongle.uf2"
+    echo "  output/github/left.uf2"
+    echo "  output/github/right.uf2"
+    echo ""
+    echo "=== Dry Run Complete! ==="
+  else
+    # Create clean output directory
+    mkdir -p output/github
+    rm -rf output/github/*
 
-    # Find and rename files
-    DONGLE=$(find output/github/firmware -name "*dongle*.uf2" -type f)
-    LEFT=$(find output/github/firmware -name "*left*.uf2" -type f)
-    RIGHT=$(find output/github/firmware -name "*right*.uf2" -type f)
+    # Download artifacts
+    gh run download "$RUN_ID" -D output/github/
 
-    if [ -n "$DONGLE" ]; then
-      cp "$DONGLE" output/github/dongle.uf2
-    fi
-    if [ -n "$LEFT" ]; then
-      cp "$LEFT" output/github/left.uf2
-    fi
-    if [ -n "$RIGHT" ]; then
-      cp "$RIGHT" output/github/right.uf2
+    # Check what we downloaded
+    echo ""
+    echo "Downloaded files:"
+    ls -lh output/github/
+
+    # Rename files if they're in firmware subdirectory
+    if [ -d "output/github/firmware" ]; then
+      echo ""
+      echo "Renaming files to match local convention..."
+
+      # Find and rename files
+      DONGLE=$(find output/github/firmware -name "*dongle*.uf2" -type f)
+      LEFT=$(find output/github/firmware -name "*left*.uf2" -type f)
+      RIGHT=$(find output/github/firmware -name "*right*.uf2" -type f)
+
+      if [ -n "$DONGLE" ]; then
+        cp "$DONGLE" output/github/dongle.uf2
+      fi
+      if [ -n "$LEFT" ]; then
+        cp "$LEFT" output/github/left.uf2
+      fi
+      if [ -n "$RIGHT" ]; then
+        cp "$RIGHT" output/github/right.uf2
+      fi
+
+      # Keep firmware directory for reference
+      echo "✓ Renamed to: dongle.uf2, left.uf2, right.uf2"
     fi
 
-    # Keep firmware directory for reference
-    echo "✓ Renamed to: dongle.uf2, left.uf2, right.uf2"
+    echo ""
+    echo "=== Download Complete! ==="
+    echo "Firmware available at:"
+    ls -lh output/github/*.uf2 2>/dev/null || echo "  output/github/firmware/"
   fi
-
-  echo ""
-  echo "=== Download Complete! ==="
-  echo "Firmware available at:"
-  ls -lh output/github/*.uf2 2>/dev/null || echo "  output/github/firmware/"
 
   exit 0
 fi
