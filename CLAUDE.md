@@ -21,11 +21,13 @@ Custom ZMK firmware configuration for the Eyeslash Corne split keyboard with USB
 │   └── west.yml                 # Dependencies manifest
 │
 ├── build.yaml                    # ⭐ GitHub Actions build matrix
-├── build-firmware.sh             # Local Docker build script
+├── build.sh                      # Local Docker build script
+├── docker-compose.yml            # Docker orchestration for builds
 │
 ├── output/                       # Firmware outputs (gitignored)
 │   ├── github/                   # Downloaded from GitHub Actions
-│   └── local/                    # Built by local Docker
+│   ├── local/                    # Latest local builds (dongle.uf2, left.uf2, right.uf2)
+│   └── backups/                  # Timestamped backups for rollback
 │
 └── vendor/                       # Reference materials (git tracked)
     ├── docs/                     # English documentation from vendor
@@ -53,9 +55,10 @@ git push
 
 **Option B: Local Docker**
 ```bash
-./build-firmware.sh
-# Output: output/local/*.uf2
-# Latest builds: output/local/*_latest.uf2
+./build.sh
+# Output: output/local/{dongle,left,right}.uf2
+# Backup: output/backups/YYYYMMDD_HHMMSS/
+# ~3-5 minutes first build, ~1 minute with caching
 ```
 
 ### 3. Flash Devices
@@ -64,11 +67,14 @@ git push
 
 **Flash firmware**:
 ```bash
-# Using GitHub Actions builds
+# Using latest local builds (recommended)
+cp output/local/*.uf2 /Volumes/NICENANO/
+
+# OR using GitHub Actions builds
 cp output/github/*.uf2 /Volumes/NICENANO/
 
-# OR using local Docker builds
-cp output/local/*_latest.uf2 /Volumes/NICENANO/
+# OR rollback to previous build
+cp output/backups/20251031_043925/*.uf2 /Volumes/NICENANO/
 
 # OR use vendor stock firmware
 cp vendor/firmware/*.uf2 /Volumes/NICENANO/
@@ -76,11 +82,32 @@ cp vendor/firmware/*.uf2 /Volumes/NICENANO/
 
 **IMPORTANT**: Flash all 3 devices when updating keymap.
 
+## Build System Details
+
+**Docker Compose Workflow**:
+- Uses `zmkfirmware/zmk-build-arm:stable` image
+- Named volume `zmk-cache` persists west dependencies (~1GB)
+- Separates west workspace (`/zmk-workspace`) from config (`/workspace`)
+- Command sequence: `west init` → `west update` → `west zephyr-export` → `west build`
+
+**Automatic Backups**:
+- `./build.sh` backs up existing firmware before each build
+- Backups saved with timestamp from previous build's file modification time
+- Latest firmware always at `output/local/{dongle,left,right}.uf2`
+- Full build history preserved in `output/backups/YYYYMMDD_HHMMSS/`
+
+**Build Times**:
+- First build: ~3-5 minutes (downloads dependencies)
+- Subsequent builds: ~1 minute (uses cached dependencies)
+- GitHub Actions: ~2 minutes (parallel builds)
+
 ## Key Files
 
 - `config/eyeslash_corne.keymap` - Edit this for custom keybindings
 - `config/eyeslash_corne.conf` - Display, sleep, Bluetooth settings
 - `build.yaml` - GitHub Actions build matrix
+- `build.sh` - Local build script with automatic backups
+- `docker-compose.yml` - Docker orchestration configuration
 - `vendor/firmware/` - Stock firmware with working LEFT OLED
 
 ## Known Issues
