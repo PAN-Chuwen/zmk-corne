@@ -56,13 +56,13 @@
             display-name = "QWERTY";
             bindings = <
 // Row 0: LEFT (6 keys) + CENTER (1 key) + RIGHT (6 keys)
-&none      &kp Q  &kp W  &kp E     &kp R      &kp T                       &kp UP          &kp O  &kp I      &kp U     &kp Y     &to 1     &kp BSPC
+&none      &kp Q  &kp W  &kp E     &kp R      &kp T                       &kp UP          &kp RIGHT  &kp LEFT   &kp O     &kp I     &kp U     &kp Y
 // Row 1: LEFT (6 keys) + CENTER (3 keys) + RIGHT (6 keys)
-&kp LSHIFT &kp A  &kp S  &kp D     &kp F      &kp G           &kp LEFT    &kp ENTER  &kp RIGHT  &sk LSHIFT  &kp P      &kp L     &kp K     &kp J  &kp H
+&kp LSHIFT &kp A  &kp S  &kp D     &kp F      &kp G           &kp LEFT    &kp ENTER  &kp RIGHT  &sk LSHIFT  &kp P      &kp L     &kp K     &kp J     &kp H
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
-&kp CAPS   &kp Z  &kp X  &kp C     &kp V      &kp B  &kp SPACE            &kp DOWN                  &kp RSHIFT  &kp FSLH      &kp DOT &kp COMMA   &kp M  &kp N
+&kp CAPS   &kp Z  &kp X  &kp C     &kp V      &kp B  &kp SPACE            &kp DOWN                  &kp RSHIFT  &kp FSLH   &kp DOT   &kp COMMA &kp M     &kp N
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
-                         &kp LGUI  &kp SPACE  &kp ENTER                                     &none   &mo 1  &kp BSPC
+                         &kp LGUI  &kp SPACE  &kp ENTER                                     &none      &mo 1      &kp BSPC
             >;
             sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOLUME_DOWN>;
         };
@@ -70,9 +70,9 @@
         lower_layer {
             display-name = "NUMBER";
             bindings = <
-&none      &none      &kp QMARK  &kp DOT    &none      &none                                  &mmv MOVE_UP                     &kp ENTER  &none    &kp N3  &kp N2     &kp N1    &none      &kp BSPC
-&kp LSHIFT &kp UNDER  &none      &none      &kp COMMA  &kp EQUAL            &mmv MOVE_LEFT    &mkp LCLK   &mmv MOVE_RIGHT    &kp RSHIFT &kp N0   &kp N7  &kp N6     &kp N5    &kp N4     &kp RALT
-&kp LSHIFT &none      &none      &kp PLUS   &kp MINUS  &kp FSLH   &trans                      &mmv MOVE_DOWN                   &kp RSHIFT &none    &kp N0  &kp N9     &kp N8    &none      &kp RSHIFT
+&none      &none      &kp QMARK  &kp DOT    &none      &none                                  &mmv MOVE_UP                     &kp ENTER  &none    &kp N3  &kp N2     &kp N1    &none
+&kp LSHIFT &kp UNDER  &none      &none      &kp COMMA  &kp EQUAL            &mmv MOVE_LEFT    &mkp LCLK   &mmv MOVE_RIGHT    &kp RSHIFT &kp N0   &kp N7  &kp N6     &kp N5    &kp N4    &kp RALT
+&kp LSHIFT &none      &none      &kp PLUS   &kp MINUS  &kp FSLH   &trans                      &mmv MOVE_DOWN                   &kp RSHIFT &none    &kp N0  &kp N9     &kp N8    &none
                                   &kp LGUI   &kp SPACE  &kp ENTER                                                              &none      &none    &kp BSPC
             >;
             sensor-bindings = <&scroll_encoder>;
@@ -81,9 +81,9 @@
         raise_layer {
             display-name = "NAV";
             bindings = <
-&kp TAB    &none      &none         &none         &kp LALT   &none                                  &mmv MOVE_UP                     &kp ENTER  &kp UP    &kp RIGHT  &kp LEFT   &none      &none       &none
-&kp LSHIFT &kp LCTRL  &none         &none         &none      &kp LGUI            &mmv MOVE_LEFT     &mkp LCLK   &mmv MOVE_RIGHT    &kp F12    &kp DOWN  &kp HOME   &kp PG_UP  &kp LEFT   &none       &none
-&kp LSHIFT &none      &none         &none         &none      &none     &trans                       &mmv MOVE_DOWN                   &kp RSHIFT &none     &kp RIGHT  &kp END    &kp PG_DN  &none       &none
+&kp TAB    &none      &none         &none         &kp LALT   &none                                  &mmv MOVE_UP                     &kp ENTER  &kp UP    &kp RIGHT  &kp LEFT   &none      &none
+&kp LSHIFT &kp LCTRL  &none         &none         &none      &kp LGUI            &mmv MOVE_LEFT     &mkp LCLK   &mmv MOVE_RIGHT    &kp F12    &kp DOWN  &kp HOME   &kp PG_UP  &kp LEFT   &none
+&kp LSHIFT &none      &none         &none         &none      &none     &trans                       &mmv MOVE_DOWN                   &kp RSHIFT &none     &kp RIGHT  &kp END    &kp PG_DN  &none
                                     &none         &none      &none                                                                   &none      &trans    &kp ENTER
             >;
             sensor-bindings = <&scroll_encoder>;
