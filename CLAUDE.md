@@ -35,6 +35,16 @@ Total: 48 keys (6+6+6+3 LEFT, 1+3+2 CENTER, 6+6+6+3 RIGHT)
 - Layer 2 (SYMBOL): Symbols, brackets, output switching (USB/BLE)
 - Layer 3 (Fn): Function keys, bootloader, system reset
 
+**Layer 0 Thumb Keys**:
+- LEFT: LGUI, SPACE, ENTER
+- RIGHT: BSPC, mo(1), none
+
+**Advanced Features Implemented**:
+- **Tap-Dance**: Top-left key (was TAB) - single tap: `` ` ``, double tap: `~`
+- **Combo Keys**: Q+W simultaneously outputs ESC (50ms timeout)
+- **Momentary Layer**: Right thumb 2nd key - hold for Layer 1 (NUMBER), release returns to base
+- **Macros**: Basic macro support tested and working
+
 **Important**: ZMK keymap arrays are defined **left-to-right**:
 - Each row: LEFT (6 keys) + CENTER + RIGHT (6 keys)
 - Center column has physical keys, not empty space
@@ -166,6 +176,101 @@ cp output/backups/20251031_043925/*.uf2 /Volumes/NICENANO/
 - Custom builds use `nice_view_custom` shield
 - LEFT OLED only works with vendor firmware (`nice_oled` shield)
 - **Workaround**: Use vendor firmware for LEFT, or accept no OLED
+
+## ZMK Advanced Features Guide
+
+### Tap-Dance (Multiple actions on one key)
+
+**Example: Backtick/Tilde key**
+```c
+behaviors {
+    td_backtick: td_backtick {
+        compatible = "zmk,behavior-tap-dance";
+        #binding-cells = <0>;
+        tapping-term-ms = <200>;
+        bindings = <&kp GRAVE>, <&kp TILDE>;
+    };
+};
+```
+Usage: `&td_backtick` in keymap bindings
+- Single tap: `` ` ``
+- Double tap: `~`
+- `tapping-term-ms`: Maximum time between taps (default 200ms)
+
+### Combo Keys (Press multiple keys simultaneously)
+
+**Example: Q+W = ESC**
+```c
+combos {
+    compatible = "zmk,combos";
+    combo_esc {
+        timeout-ms = <50>;
+        key-positions = <1 2>;  // Q=1, W=2
+        bindings = <&kp ESC>;
+    };
+};
+```
+- `timeout-ms`: All keys must be pressed within this time
+- `key-positions`: Array of key position indices (0-based, left-to-right)
+- **Finding key positions**: Count from 0, left-to-right for each row including center column
+
+### Macros (Automated key sequences)
+
+**Example: Simple macro typing "aa" with delay**
+```c
+macros {
+    test_aa: test_aa {
+        compatible = "zmk,behavior-macro";
+        #binding-cells = <0>;
+        wait-ms = <1000>;  // Delay between actions
+        tap-ms = <50>;     // How long to hold each tap
+        bindings
+            = <&macro_tap &kp A>
+            , <&macro_tap &kp A>
+            ;
+    };
+};
+```
+Usage: `&test_aa` in keymap bindings
+
+**Macro modes**:
+- `&macro_tap`: Press and release (like typing)
+- `&macro_press`: Hold down (for modifiers)
+- `&macro_release`: Release held key
+
+**Example: Modifier macro (Ctrl+Space)**
+```c
+macros {
+    ctrl_space: ctrl_space {
+        compatible = "zmk,behavior-macro";
+        #binding-cells = <0>;
+        wait-ms = <50>;
+        tap-ms = <50>;
+        bindings
+            = <&macro_press &kp LCTRL>
+            , <&macro_tap &kp SPACE>
+            , <&macro_release &kp LCTRL>
+            ;
+    };
+};
+```
+
+### Momentary Layer Switch
+
+**Usage**: `&mo <layer_number>`
+- Hold: Activates layer
+- Release: Returns to base layer
+- Example: `&mo 1` switches to Layer 1 while held
+
+### Key Position Reference
+
+48-key layout positions (0-indexed, left-to-right):
+```
+Row 0: 0-12   (6 LEFT + 1 CENTER + 6 RIGHT)
+Row 1: 13-27  (6 LEFT + 3 CENTER + 6 RIGHT)
+Row 2: 28-41  (6 LEFT + 2 CENTER + 6 RIGHT)
+Row 3: 42-47  (3 LEFT thumbs + 3 RIGHT thumbs)
+```
 
 ## Keymap Visualization
 
