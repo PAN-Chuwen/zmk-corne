@@ -12,26 +12,33 @@ Custom ZMK firmware configuration for the Eyeslash Corne split keyboard with USB
 
 ## Keyboard Layout
 
-**Corne 42-key split keyboard** (3x6 + 3 thumbs per side):
+**Eyeslash Corne 48-key split keyboard with center column**:
 
 ```
-LEFT SPLIT (21 keys)          RIGHT SPLIT (21 keys)
-┌───┬───┬───┬───┬───┬───┐    ┌───┬───┬───┬───┬───┬───┐
-│ 0 │ Q │ W │ E │ R │ T │    │ Y │ U │ I │ O │ ← │ → │  Row 0 (6+6)
-├───┼───┼───┼───┼───┼───┤    ├───┼───┼───┼───┼───┼───┤
-│SFT│ A │ S │ D │ F │ G │    │ H │ J │ K │ L │ P │SFT│  Row 1 (6+6)
-├───┼───┼───┼───┼───┼───┤    ├───┼───┼───┼───┼───┼───┤
-│CAP│ Z │ X │ C │ V │ B │    │ N │ M │ , │ . │ / │SFT│  Row 2 (6+6)
-└───┴───┴───┼───┼───┼───┤    ├───┼───┼───┼───┴───┴───┘
-            │GUI│SPC│ENT│    │BSP│ L1│ 0 │             Thumbs (3+3)
-            └───┴───┴───┘    └───┴───┴───┘
+    LEFT SPLIT (6 keys)      CENTER       RIGHT SPLIT (6 keys)
+┌───┬───┬───┬───┬───┬───┐    ┌───┐    ┌───┬───┬───┬───┬───┬───┐
+│TAB│ Q │ W │ E │ R │ T │    │ ↑ │    │ Y │ U │ I │ O │ P │BSP│  Row 0 (6+1+6 = 13)
+├───┼───┼───┼───┼───┼───┤┌───┼───┼───┐├───┼───┼───┼───┼───┼───┤
+│TD0│ A │ S │ D │ F │ G ││ ← │ENT│ → ││ H │ J │ K │ L │ . │ ' │  Row 1 (6+3+6 = 15)
+├───┼───┼───┼───┼───┼───┤└───┼───┼───┘├───┼───┼───┼───┼───┼───┤
+│SFT│ Z │ X │ C │ V │ B │    │SPC│    │ N │ M │ , │ ; │ / │ESC│  Row 2 (6+2+6 = 14)
+└───┴───┴───┼───┼───┼───┤    └───┘    ├───┼───┼───┼───┴───┴───┘
+            │GUI│ L1│ALT│              │ALT│ L2│BSP│              Thumbs (3+3 = 6)
+            └───┴───┴───┘              └───┴───┴───┘
 
-Total: 42 keys (21 per split)
+Total: 48 keys (6+6+6+3 LEFT, 1+3+2 CENTER, 6+6+6+3 RIGHT)
 ```
 
-**Important**: ZMK keymap arrays are defined **left-to-right** for both splits:
-- LEFT split: Keys 0-5 map to leftmost → rightmost physically
-- RIGHT split: Keys 0-5 map to leftmost → rightmost physically (Y U I O ← →)
+**Layers**:
+- Layer 0 (QWERTY): Base typing layer with nav arrows in center column
+- Layer 1 (NUMBER): Numbers, Bluetooth/RGB controls, mouse movement
+- Layer 2 (SYMBOL): Symbols, brackets, output switching (USB/BLE)
+- Layer 3 (Fn): Function keys, bootloader, system reset
+
+**Important**: ZMK keymap arrays are defined **left-to-right**:
+- Each row: LEFT (6 keys) + CENTER + RIGHT (6 keys)
+- Center column has physical keys, not empty space
+- See `vendor/keymap-diagrams/corne/` for visual reference
 
 ## Repository Structure
 
@@ -54,7 +61,11 @@ Total: 42 keys (21 per split)
 │   └── backups/                  # Timestamped backups for rollback
 │
 └── vendor/                       # Reference materials (git tracked)
-    ├── docs/                     # English documentation from vendor
+    ├── docs/                     # Documentation from vendor
+    │   ├── *.doc                 # English documentation
+    │   └── 中文说明/              # Chinese documentation (comprehensive guides)
+    ├── keymap-diagrams/          # Visual keymap references
+    │   └── corne/                # Layer diagrams (layer0-3.jpg)
     └── firmware/                 # Stock firmware (nice_oled - LEFT OLED works)
 ```
 
