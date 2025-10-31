@@ -34,6 +34,23 @@
             #binding-cells = <0>;
             bindings = <&sk LSHIFT>, <&mo 2>;
         };
+
+        td_backtick: td_backtick {
+            compatible = "zmk,behavior-tap-dance";
+            display-name = "Backtick/Tilde";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&kp GRAVE>, <&kp TILDE>;
+        };
+    };
+
+    combos {
+        compatible = "zmk,combos";
+        combo_esc {
+            timeout-ms = <50>;
+            key-positions = <1 2>;
+            bindings = <&kp ESC>;
+        };
     };
 
     rgb_encoder: rgb_encoder {
@@ -56,13 +73,13 @@
             display-name = "QWERTY";
             bindings = <
 // Row 0: LEFT (6 keys) + CENTER (1 key) + RIGHT (6 keys)
-&kp TAB    &kp Q  &kp W  &kp E     &kp R      &kp T                         &kp UP          &kp Y     &kp U     &kp I     &kp O     &kp LEFT   &kp RIGHT
+&td_backtick &kp Q  &kp W  &kp E     &kp R      &kp T                         &kp UP          &kp Y     &kp U     &kp I     &kp O     &kp LEFT   &kp RIGHT
 // Row 1: LEFT (6 keys) + CENTER (3 keys) + RIGHT (6 keys)
 &td0       &kp A  &kp S  &kp D     &kp F      &kp G        &kp LEFT  &kp ENTER  &kp RIGHT  &kp H     &kp J     &kp K     &kp L     &kp P      &kp RSHIFT
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
 &kp LSHIFT &kp Z  &kp X  &kp C     &kp V      &kp B        &kp SPACE            &kp DOWN   &kp N     &kp M     &kp COMMA &kp DOT   &kp FSLH   &kp RSHIFT
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
-                         &kp LGUI  &none      &kp LALT                                      &kp BSPC  &none     &none
+                         &kp LGUI  &none      &kp LALT                                      &kp BSPC  &mo 1     &none
             >;
             sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOLUME_DOWN>;
         };
@@ -77,7 +94,7 @@
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
 &trans           &rgb_ug RGB_OFF &rgb_ug RGB_ON &ext_power EP_OFF &trans  &rgb_ug RGB_EFF &kp C_MUTE                &mmv MOVE_DOWN              &rgb_ug RGB_EFR &rgb_ug RGB_SPI &rgb_ug RGB_BRI &rgb_ug RGB_BRD &kp END &kp PG_DN
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
-                                 &trans        &trans        &trans                                                                              &kp INS       &trans        &trans
+                                 &kp LGUI      &none         &kp ENTER                                                                           &kp INS       &trans        &trans
             >;
             sensor-bindings = <&scroll_encoder>;
         };
