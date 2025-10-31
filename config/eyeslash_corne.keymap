@@ -45,24 +45,67 @@
     };
 
     macros {
-        test_aa: test_aa {
+        input_switch: input_switch {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            wait-ms = <1000>;
+            wait-ms = <50>;
             tap-ms = <50>;
             bindings
-                = <&macro_tap &kp A>
-                , <&macro_tap &kp A>
+                = <&macro_press &kp LCTRL>
+                , <&macro_tap &kp SPACE>
+                , <&macro_release &kp LCTRL>
                 ;
         };
     };
 
     combos {
         compatible = "zmk,combos";
+
+        // Simple combo: Q+W = ESC
         combo_esc {
             timeout-ms = <50>;
             key-positions = <1 2>;
             bindings = <&kp ESC>;
+        };
+
+        // Single modifier combos (hold to use as modifier)
+        combo_cmd {
+            timeout-ms = <50>;
+            key-positions = <18 22>;  // G+H
+            bindings = <&kp LGUI>;
+            slow-release;
+        };
+        combo_opt {
+            timeout-ms = <50>;
+            key-positions = <23 24>;  // J+K
+            bindings = <&kp LALT>;
+            slow-release;
+        };
+        combo_ctrl {
+            timeout-ms = <50>;
+            key-positions = <24 25>;  // K+L
+            bindings = <&kp LCTRL>;
+            slow-release;
+        };
+
+        // Dual modifier combos
+        combo_cmd_opt {
+            timeout-ms = <50>;
+            key-positions = <18 22 23>;  // G+H+J
+            bindings = <&kp LG(LALT)>;
+            slow-release;
+        };
+        combo_opt_ctrl {
+            timeout-ms = <50>;
+            key-positions = <23 24 25>;  // J+K+L
+            bindings = <&kp LA(LCTRL)>;
+            slow-release;
+        };
+        combo_cmd_ctrl {
+            timeout-ms = <50>;
+            key-positions = <38 39>;  // ,+.
+            bindings = <&kp LG(LCTRL)>;
+            slow-release;
         };
     };
 
@@ -88,7 +131,7 @@
 // Row 0: LEFT (6 keys) + CENTER (1 key) + RIGHT (6 keys)
 &td_backtick &kp Q  &kp W  &kp E     &kp R      &kp T                         &kp UP          &kp Y     &kp U     &kp I     &kp O     &kp LEFT   &kp RIGHT
 // Row 1: LEFT (6 keys) + CENTER (3 keys) + RIGHT (6 keys)
-&td0       &test_aa &kp S  &kp D     &kp F      &kp G        &kp LEFT  &kp ENTER  &kp RIGHT  &kp H     &kp J     &kp K     &kp L     &kp P      &kp RSHIFT
+&td0       &kp A  &kp S  &kp D     &kp F      &kp G        &kp LEFT  &kp ENTER  &kp RIGHT  &kp H     &kp J     &kp K     &kp L     &kp P      &kp RSHIFT
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
 &kp LSHIFT &kp Z  &kp X  &kp C     &kp V      &kp B        &kp SPACE            &kp DOWN   &kp N     &kp M     &kp COMMA &kp DOT   &kp FSLH   &kp RSHIFT
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
