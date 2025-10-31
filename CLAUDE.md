@@ -10,6 +10,29 @@ Custom ZMK firmware configuration for the Eyeslash Corne split keyboard with USB
 - **USB Dongle**: Bluetooth central (connects to Mac via USB)
 - **Connection**: Keyboards → Dongle (Bluetooth) → Mac (USB)
 
+## Keyboard Layout
+
+**Corne 42-key split keyboard** (3x6 + 3 thumbs per side):
+
+```
+LEFT SPLIT (21 keys)          RIGHT SPLIT (21 keys)
+┌───┬───┬───┬───┬───┬───┐    ┌───┬───┬───┬───┬───┬───┐
+│ 0 │ Q │ W │ E │ R │ T │    │ Y │ U │ I │ O │ ← │ → │  Row 0 (6+6)
+├───┼───┼───┼───┼───┼───┤    ├───┼───┼───┼───┼───┼───┤
+│SFT│ A │ S │ D │ F │ G │    │ H │ J │ K │ L │ P │SFT│  Row 1 (6+6)
+├───┼───┼───┼───┼───┼───┤    ├───┼───┼───┼───┼───┼───┤
+│CAP│ Z │ X │ C │ V │ B │    │ N │ M │ , │ . │ / │SFT│  Row 2 (6+6)
+└───┴───┴───┼───┼───┼───┤    ├───┼───┼───┼───┴───┴───┘
+            │GUI│SPC│ENT│    │BSP│ L1│ 0 │             Thumbs (3+3)
+            └───┴───┴───┘    └───┴───┴───┘
+
+Total: 42 keys (21 per split)
+```
+
+**Important**: ZMK keymap arrays are defined **left-to-right** for both splits:
+- LEFT split: Keys 0-5 map to leftmost → rightmost physically
+- RIGHT split: Keys 0-5 map to leftmost → rightmost physically (Y U I O ← →)
+
 ## Repository Structure
 
 ```
@@ -115,13 +138,16 @@ cp output/backups/20251031_043925/*.uf2 /Volumes/NICENANO/
 
 ## Key Files
 
-- `config/eyeslash_corne.keymap` - Edit this for custom keybindings
+- `config/eyeslash_corne.keymap` - **Main keymap configuration (4 layers: QWERTY, NUMBER, NAV, Fn)**
 - `config/eyeslash_corne.conf` - Display, sleep, Bluetooth settings
+- `config/eyeslash_corne.json` - ZMK Studio configuration (GUI editing)
 - `build.yaml` - GitHub Actions build matrix
 - `build.sh` - Parallel build script with automatic backups
 - `flash.sh` - Interactive firmware flashing tool
 - `docker-compose.yml` - Docker orchestration configuration
 - `vendor/firmware/` - Stock firmware with working LEFT OLED
+- `keymap.yaml` - Auto-generated parsed keymap (for visualization)
+- `keymap.svg` - Auto-generated visual diagram of all layers
 
 ## Known Issues
 
