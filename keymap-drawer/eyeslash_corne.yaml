@@ -1,7 +1,7 @@
 layout: {zmk_keyboard: eyeslash_corne}
 layers:
   QWERTY:
-  - '&td_backtick'
+  - '&input_switch'
   - Q
   - W
   - E
@@ -199,13 +199,13 @@ layers:
 combos:
 - p: [1, 2]
   k: $$mdi:keyboard-esc$$
-- p: [18, 22]
+- p: [22, 23]
   k: LGUI
 - p: [23, 24]
   k: $$mdi:apple-keyboard-option$$
 - p: [24, 25]
   k: $$mdi:apple-keyboard-control$$
-- p: [18, 22, 23]
+- p: [22, 23, 24]
   k: Gui+$$mdi:apple-keyboard-option$$
 - p: [23, 24, 25]
   k: Alt+$$mdi:apple-keyboard-control$$
