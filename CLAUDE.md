@@ -31,19 +31,22 @@ Total: 48 keys (6+6+6+3 LEFT, 1+3+2 CENTER, 6+6+6+3 RIGHT)
 
 **Layers**:
 - Layer 0 (QWERTY): Base typing layer with nav arrows in center column
-- Layer 1 (NUMBER): Numbers, Bluetooth/RGB controls, mouse movement
-- Layer 2 (SYMBOL): Symbols, brackets, output switching (USB/BLE)
+- Layer 1 (NUMBER): Numbers, Bluetooth/RGB controls
+- Layer 2 (NAV): Mouse movement (ESDF), symbols, output switching (USB/BLE)
 - Layer 3 (Fn): Function keys, bootloader, system reset
 
 **Layer 0 Thumb Keys**:
 - LEFT: LGUI, SPACE, ENTER
-- RIGHT: BSPC, mo(1), none
+- RIGHT: BSPC, mo(1) NUMBER, mo(2) NAV
 
 **Advanced Features Implemented**:
-- **Tap-Dance**: Top-left key (was TAB) - single tap: `` ` ``, double tap: `~`
-- **Combo Keys**: Q+W simultaneously outputs ESC (50ms timeout)
-- **Momentary Layer**: Right thumb 2nd key - hold for Layer 1 (NUMBER), release returns to base
-- **Macros**: Basic macro support tested and working
+- **Macros**: Top-left key triggers Ctrl+Space (Mac input switching)
+- **Tap-Dance**: td0 on left (Shift/Layer2) - originally TAB was backtick/tilde
+- **Combo Keys**: Q+W = ESC (50ms timeout)
+- **Modifier Combos** (RIGHT split, with slow-release):
+  - H+J = CMD, J+K = OPTION, K+L = CTRL
+  - H+J+K = CMD+OPTION, J+K+L = OPTION+CTRL, ,+. = CMD+CTRL
+- **Mouse Movement**: Layer 2 (NAV) - E=UP, S=LEFT, D=DOWN, F=RIGHT (continuous while held)
 
 **Important**: ZMK keymap arrays are defined **left-to-right**:
 - Each row: LEFT (6 keys) + CENTER + RIGHT (6 keys)
