@@ -68,10 +68,10 @@
             bindings = <&kp ESC>;
         };
 
-        // Single modifier combos (hold to use as modifier)
+        // Single modifier combos (hold to use as modifier) - RIGHT split only
         combo_cmd {
             timeout-ms = <50>;
-            key-positions = <18 22>;  // G+H
+            key-positions = <22 23>;  // H+J
             bindings = <&kp LGUI>;
             slow-release;
         };
@@ -91,7 +91,7 @@
         // Dual modifier combos
         combo_cmd_opt {
             timeout-ms = <50>;
-            key-positions = <18 22 23>;  // G+H+J
+            key-positions = <22 23 24>;  // H+J+K
             bindings = <&kp LG(LALT)>;
             slow-release;
         };
@@ -129,7 +129,7 @@
             display-name = "QWERTY";
             bindings = <
 // Row 0: LEFT (6 keys) + CENTER (1 key) + RIGHT (6 keys)
-&td_backtick &kp Q  &kp W  &kp E     &kp R      &kp T                         &kp UP          &kp Y     &kp U     &kp I     &kp O     &kp LEFT   &kp RIGHT
+&input_switch &kp Q  &kp W  &kp E     &kp R      &kp T                         &kp UP          &kp Y     &kp U     &kp I     &kp O     &kp LEFT   &kp RIGHT
 // Row 1: LEFT (6 keys) + CENTER (3 keys) + RIGHT (6 keys)
 &td0       &kp A  &kp S  &kp D     &kp F      &kp G        &kp LEFT  &kp ENTER  &kp RIGHT  &kp H     &kp J     &kp K     &kp L     &kp P      &kp RSHIFT
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
