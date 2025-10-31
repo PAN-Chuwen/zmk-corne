@@ -135,7 +135,7 @@
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
 &kp LSHIFT &kp Z  &kp X  &kp C     &kp V      &kp B        &kp SPACE            &kp DOWN   &kp N     &kp M     &kp COMMA &kp DOT   &kp FSLH   &kp RSHIFT
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
-                         &kp LGUI  &kp SPACE  &kp ENTER                                     &kp BSPC  &mo 1     &none
+                         &kp LGUI  &kp SPACE  &kp ENTER                                     &kp BSPC  &mo 1     &mo 2
             >;
             sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOLUME_DOWN>;
         };
@@ -156,7 +156,7 @@
         };
 
         raise_layer {
-            display-name = "SYMBOL";
+            display-name = "NAV";
             bindings = <
 // Row 0: LEFT (6 keys) + CENTER (1 key) + RIGHT (6 keys)
 &trans     &kp EXCL   &kp AT        &mmv MOVE_UP  &kp DLLR   &kp PRCNT                          &mmv MOVE_UP                              &kp CARET &kp AMPS  &kp ASTRK &kp LPAR  &kp RPAR  &kp BSPC
