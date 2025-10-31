@@ -159,9 +159,9 @@
             display-name = "SYMBOL";
             bindings = <
 // Row 0: LEFT (6 keys) + CENTER (1 key) + RIGHT (6 keys)
-&trans     &kp EXCL   &kp AT        &kp HASH      &kp DLLR   &kp PRCNT                          &mmv MOVE_UP                              &kp CARET &kp AMPS  &kp ASTRK &kp LPAR  &kp RPAR  &kp BSPC
+&trans     &kp EXCL   &kp AT        &mmv MOVE_UP  &kp DLLR   &kp PRCNT                          &mmv MOVE_UP                              &kp CARET &kp AMPS  &kp ASTRK &kp LPAR  &kp RPAR  &kp BSPC
 // Row 1: LEFT (6 keys) + CENTER (3 keys) + RIGHT (6 keys)
-&trans     &none      &mkp LCLK     &mkp MCLK     &mkp RCLK  &mkp MB4      &mmv MOVE_LEFT  &mkp LCLK      &mmv MOVE_RIGHT  &kp MINUS &kp EQUAL &kp LBKT  &kp RBKT  &none     &kp BSLH
+&trans     &none      &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &mkp MB4  &mmv MOVE_LEFT  &mkp LCLK      &mmv MOVE_RIGHT  &kp MINUS &kp EQUAL &kp LBKT  &kp RBKT  &none     &kp BSLH
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
 &trans     &out OUT_USB &out OUT_BLE &none         &none      &mkp MB5      &trans                        &mmv MOVE_DOWN              &kp UNDER &kp PLUS  &kp LBRC  &kp RBRC  &kp PIPE  &kp TILDE
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
