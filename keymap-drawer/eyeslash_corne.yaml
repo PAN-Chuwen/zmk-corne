@@ -15,7 +15,7 @@ layers:
   - $$mdi:arrow-left-bold$$
   - $$mdi:arrow-right-bold$$
   - '&td0'
-  - A
+  - '&test_aa'
   - S
   - D
   - F
@@ -199,5 +199,3 @@ layers:
 combos:
 - p: [1, 2]
   k: $$mdi:keyboard-esc$$
-- p: [4, 18]
-  k: '&input_switch'
