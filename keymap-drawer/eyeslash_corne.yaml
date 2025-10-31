@@ -199,3 +199,5 @@ layers:
 combos:
 - p: [1, 2]
   k: $$mdi:keyboard-esc$$
+- p: [4, 18]
+  k: '&input_switch'

@@ -528,6 +528,10 @@ rect.held, rect.combo.held {
 <rect rx="6" ry="6" x="98" y="29" width="28" height="26" class="combo"/>
 <use href="#mdi:keyboard-esc" xlink:href="#mdi:keyboard-esc" x="103" y="33" height="18" width="18.0" class="combo tap glyph mdi:keyboard-esc"/>
 </g>
+<g class="combo combopos-1">
+<rect rx="6" ry="6" x="266" y="53" width="28" height="26" class="combo"/>
+<text x="280" y="66" class="combo tap"><tspan style="font-size: 60%">&amp;input_sw…</tspan></text>
+</g>
 </g>
 </g>
 <g transform="translate(40, 318)" class="layer-NUMBER">
@@ -816,6 +820,10 @@ rect.held, rect.combo.held {
 <rect rx="6" ry="6" x="98" y="29" width="28" height="26" class="combo"/>
 <use href="#mdi:keyboard-esc" xlink:href="#mdi:keyboard-esc" x="103" y="33" height="18" width="18.0" class="combo tap glyph mdi:keyboard-esc"/>
 </g>
+<g class="combo combopos-1">
+<rect rx="6" ry="6" x="266" y="53" width="28" height="26" class="combo"/>
+<text x="280" y="66" class="combo tap"><tspan style="font-size: 60%">&amp;input_sw…</tspan></text>
+</g>
 </g>
 </g>
 <g transform="translate(40, 637)" class="layer-SYMBOL">
@@ -1082,6 +1090,10 @@ rect.held, rect.combo.held {
 <rect rx="6" ry="6" x="98" y="29" width="28" height="26" class="combo"/>
 <use href="#mdi:keyboard-esc" xlink:href="#mdi:keyboard-esc" x="103" y="33" height="18" width="18.0" class="combo tap glyph mdi:keyboard-esc"/>
 </g>
+<g class="combo combopos-1">
+<rect rx="6" ry="6" x="266" y="53" width="28" height="26" class="combo"/>
+<text x="280" y="66" class="combo tap"><tspan style="font-size: 60%">&amp;input_sw…</tspan></text>
+</g>
 </g>
 </g>
 <g transform="translate(40, 955)" class="layer-Fn">
@@ -1338,6 +1350,10 @@ rect.held, rect.combo.held {
 <g class="combo combopos-0">
 <rect rx="6" ry="6" x="98" y="29" width="28" height="26" class="combo"/>
 <use href="#mdi:keyboard-esc" xlink:href="#mdi:keyboard-esc" x="103" y="33" height="18" width="18.0" class="combo tap glyph mdi:keyboard-esc"/>
+</g>
+<g class="combo combopos-1">
+<rect rx="6" ry="6" x="266" y="53" width="28" height="26" class="combo"/>
+<text x="280" y="66" class="combo tap"><tspan style="font-size: 60%">&amp;input_sw…</tspan></text>
 </g>
 </g>
 </g>
