@@ -62,7 +62,7 @@
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
 &kp LSHIFT &kp Z  &kp X  &kp C     &kp V      &kp B        &kp SPACE            &kp DOWN   &kp N     &kp M     &kp COMMA &kp DOT   &kp FSLH   &kp RSHIFT
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
-                         &kp LGUI  &to 1      &kp LALT                                      &kp BSPC  &mo 2     &mo 3
+                         &kp LGUI  &none      &kp LALT                                      &kp BSPC  &none     &none
             >;
             sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOLUME_DOWN>;
         };
