@@ -44,12 +44,31 @@
         };
     };
 
+    macros {
+        input_switch: input_switch {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <50>;
+            tap-ms = <50>;
+            bindings
+                = <&macro_press &kp LCTRL>
+                , <&macro_tap &kp SPACE>
+                , <&macro_release &kp LCTRL>
+                ;
+        };
+    };
+
     combos {
         compatible = "zmk,combos";
         combo_esc {
             timeout-ms = <50>;
             key-positions = <1 2>;
             bindings = <&kp ESC>;
+        };
+        combo_input_switch {
+            timeout-ms = <50>;
+            key-positions = <4 18>;
+            bindings = <&input_switch>;
         };
     };
 
