@@ -36,7 +36,7 @@ Total: 48 keys | Positions 0-47 (left-to-right, 0-indexed)
 Row 0: 0=`~  1=Q  2=W  3=E   4=R   5=T   6=↑   7=Y  8=U  9=I  10=O  11=←  12=→
 Row 1: 13=⇧ 14=A 15=S 16=D  17=F  18=G  19=←  20=⏎ 21=→  22=H 23=J 24=K 25=L 26=P 27=⇧
 Row 2: 28=⇪ 29=Z 30=X 31=C  32=V  33=B  34=␣  35=↓  36=N 37=M 38=, 39=. 40=/ 41=⇧
-Thumb: 42=⌘ 43=␣ 44=⏎  45=⌫/DEL  46=L1  47=L2
+Thumb: 42=⌘ 43=␣ 44=⏎  45=⌫  46=L1  47=L2
 ```
 
 **Layers**:
@@ -47,7 +47,7 @@ Thumb: 42=⌘ 43=␣ 44=⏎  45=⌫/DEL  46=L1  47=L2
 
 **Layer 0 Thumb Keys**:
 - LEFT (42-44): GUI, SPACE, ENTER
-- RIGHT (45-47): BSPC/DEL (tap-dance), mo(1) NUMBER, mo(2) NAV
+- RIGHT (45-47): BACKSPACE, mo(1) NUMBER, mo(2) NAV
 
 **Advanced Features Implemented**:
 - **Macros**: Top-left key triggers Ctrl+Space (Mac input switching)
