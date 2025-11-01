@@ -98,28 +98,76 @@ cd ~/zmk-corne-config
 vim config/eyeslash_corne.keymap
 ```
 
-### 2. Build Firmware
+### 2. Build Firmware via GitHub Actions (Recommended)
 
-**Option A: GitHub Actions (Recommended)**
+**Workflow:**
 ```bash
 git add config/eyeslash_corne.keymap
 git commit -m "feat: update keymap"
 git push
-# Wait ~2 minutes, download "firmware" artifact
-# Extract to output/github/
 ```
 
-**Option B: Local Docker**
+**What happens automatically:**
+1. **Draw Keymap workflow** (~30s):
+   - Parses keymap and generates visual diagram
+   - Commits `keymap-drawer/eyeslash_corne.svg` to repo
+   - View updated layout before building firmware!
+
+2. **Build ZMK firmware workflow** (~2 minutes):
+   - Builds in parallel: dongle, left, right (4 jobs)
+   - Uses cached west modules for speed
+   - Creates "firmware" artifact with all .uf2 files
+
+**Download firmware:**
+```bash
+# Method 1: Using gh CLI (fastest)
+gh run list --limit 1  # Get latest run ID
+gh run download <RUN_ID> --dir output/github
+
+# Method 2: Via GitHub web UI
+# Go to Actions tab → Click latest "Build ZMK firmware" → Download "firmware" artifact
+
+# Copy for easier access
+cp output/github/firmware/*.uf2 output/github/
+# Results: dongle.uf2, left.uf2, right.uf2
+```
+
+**Why GitHub Actions?**
+- ✅ No local Docker setup needed
+- ✅ Parallel builds (faster than local)
+- ✅ Automatic keymap visualization
+- ✅ Build history and artifacts preserved
+- ✅ Works from any machine
+
+**Local Docker Build (Alternative):**
 ```bash
 ./build.sh
 # Output: output/local/{dongle,left,right}.uf2
 # Backup: output/backups/YYYYMMDD_HHMMSS/
-# ~3-5 minutes first build, ~27 seconds with caching (parallel builds!)
+# ~3-5 minutes first build, ~27 seconds with caching
 ```
 
-### 3. Flash Devices
+### 3. Flash Firmware
 
-**Interactive flash script (recommended)**:
+**Complete Flash Workflow:**
+```bash
+# 1. Download firmware (if using GitHub Actions)
+gh run download <RUN_ID> --dir output/github
+cp output/github/firmware/eyeslash_corne_central_dongle_oled.uf2 output/github/dongle.uf2
+cp "output/github/firmware/eyeslash_corne_peripheral_left nice_oled-nice_nano_v2-zmk.uf2" output/github/left.uf2
+cp "output/github/firmware/eyeslash_corne_peripheral_right nice_oled-nice_nano_v2-zmk.uf2" output/github/right.uf2
+
+# 2. Flash each device
+# For each device (dongle, left, right):
+#   a. Double-press RESET button (enters bootloader mode)
+#   b. Device appears as NICENANO volume
+#   c. Copy firmware:
+cp output/github/dongle.uf2 /Volumes/NICENANO/
+#   d. Device automatically reboots after copy
+#   e. Repeat for left and right keyboards
+```
+
+**Interactive Flash Script (Alternative):**
 ```bash
 ./flash.sh
 # Guides you through:
@@ -128,17 +176,10 @@ git push
 # - Automatic detection of bootloader mode
 ```
 
-**Manual flashing**:
-```bash
-# Enter bootloader: Double-press RESET button
-# Then copy firmware:
-cp output/local/*.uf2 /Volumes/NICENANO/
-
-# OR rollback to backup
-cp output/backups/20251031_043925/*.uf2 /Volumes/NICENANO/
-```
-
-**IMPORTANT**: Flash all 3 devices when updating keymap.
+**IMPORTANT**:
+- Flash all 3 devices when updating keymap
+- Flash order doesn't matter
+- If a device doesn't work, try settings_reset.uf2 first, then reflash
 
 ## Build System Details
 
