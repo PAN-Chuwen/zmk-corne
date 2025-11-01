@@ -1,4 +1,4 @@
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 600   // Slow speed (matching Vial QMK max_speed=10)
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 25
 
 #include <input/processors.dtsi>
@@ -21,9 +21,9 @@
 };
 
 &mmv {
-    time-to-max-speed-ms = <300>;  // Slight ramp (Vial was 30 but in different units)
-    acceleration-exponent = <1>;   // Slight acceleration like Vial
-    trigger-period-ms = <20>;      // Match Vial interval=20ms
+    time-to-max-speed-ms = <250>;
+    acceleration-exponent = <1>;
+    trigger-period-ms = <16>;
 };
 
 / {
