@@ -1,4 +1,4 @@
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1600  // Fixed speed, no acceleration
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 600   // Slow speed (matching Vial QMK max_speed=10)
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 25
 
 #include <input/processors.dtsi>
@@ -16,14 +16,14 @@
 
 &msc {
     acceleration-exponent = <0>;   // No acceleration for scroll
-    time-to-max-speed-ms = <0>;    // Instant max speed (constant)
+    time-to-max-speed-ms = <0>;    // Instant
     delay-ms = <0>;
 };
 
 &mmv {
-    time-to-max-speed-ms = <0>;    // Instant - no acceleration
-    acceleration-exponent = <0>;   // No acceleration - constant speed
-    trigger-period-ms = <16>;      // Standard 60Hz update
+    time-to-max-speed-ms = <300>;  // Slight ramp (Vial was 30 but in different units)
+    acceleration-exponent = <1>;   // Slight acceleration like Vial
+    trigger-period-ms = <20>;      // Match Vial interval=20ms
 };
 
 / {
