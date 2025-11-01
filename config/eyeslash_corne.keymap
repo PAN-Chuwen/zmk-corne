@@ -100,12 +100,12 @@
             bindings = <&kp LT>, <&kp GT>;
         };
 
-        td_esc_bspc: td_esc_bspc {
+        td_bspc_del: td_bspc_del {
             compatible = "zmk,behavior-tap-dance";
-            display-name = "Escape/Backspace";
+            display-name = "Backspace/Delete";
             #binding-cells = <0>;
             tapping-term-ms = <200>;
-            bindings = <&kp ESC>, <&kp BSPC>;
+            bindings = <&kp BSPC>, <&kp DEL>;
         };
     };
 
@@ -298,7 +298,7 @@
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
 &kp CAPS     &kp Z  &kp X  &kp C     &kp V      &kp B        &kp SPACE            &kp DOWN   &kp N     &kp M     &kp COMMA &kp DOT   &kp FSLH   &kp RSHIFT
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
-                           &kp LGUI  &kp SPACE  &kp ENTER                                     &td_esc_bspc &mo 1  &mo 2
+                           &kp LGUI  &kp SPACE  &kp ENTER                                     &td_bspc_del &mo 1  &mo 2
             >;
             sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOLUME_DOWN>;
         };
