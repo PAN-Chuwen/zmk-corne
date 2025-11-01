@@ -17,18 +17,18 @@ Custom ZMK firmware configuration for the Eyeslash Corne split keyboard with USB
 **PHYSICAL LAYOUT (ZMK Position IDs 0-47)**:
 
 ```
-    LEFT SPLIT (6 keys)      CENTER       RIGHT SPLIT (6 keys)
-┌────┬───┬───┬───┬───┬───┐   ┌────┐   ┌───┬───┬───┬───┬───┬───┐
-│ 0  │ 1 │ 2 │ 3 │ 4 │ 5 │   │ 6  │   │ 7 │ 8 │ 9 │10 │11 │12 │  Row 0 (13 keys)
-├────┼───┼───┼───┼───┼───┤ ┌─┼────┼─┐ ├───┼───┼───┼───┼───┼───┤
-│ 13 │14 │15 │16 │17 │18 │ │19│ 20 │21│ │22 │23 │24 │25 │26 │27 │  Row 1 (15 keys)
-├────┼───┼───┼───┼───┼───┤ └─┼────┼─┘ ├───┼───┼───┼───┼───┼───┤
-│ 28 │29 │30 │31 │32 │33 │   │ 34 │35 │ │36 │37 │38 │39 │40 │41 │  Row 2 (14 keys)
-└────┴───┴───┼───┼───┼───┤   └────┘   ├───┼───┼───┼───┴───┴───┘
-            │42 │43 │44 │            │45 │46 │47 │              Thumbs (6 keys)
-            └───┴───┴───┘            └───┴───┴───┘
+     LEFT SPLIT (6)           CENTER            RIGHT SPLIT (6)
+┌────┬────┬────┬────┬────┬────┐   ┌────┐   ┌────┬────┬────┬────┬────┬────┐
+│ 0  │ 1  │ 2  │ 3  │ 4  │ 5  │   │ 6  │   │ 7  │ 8  │ 9  │ 10 │ 11 │ 12 │  Row 0 (13)
+├────┼────┼────┼────┼────┼────┤┌──┼────┼──┐├────┼────┼────┼────┼────┼────┤
+│ 13 │ 14 │ 15 │ 16 │ 17 │ 18 ││19│ 20 │21││ 22 │ 23 │ 24 │ 25 │ 26 │ 27 │  Row 1 (15)
+├────┼────┼────┼────┼────┼────┤└──┼────┼──┘├────┼────┼────┼────┼────┼────┤
+│ 28 │ 29 │ 30 │ 31 │ 32 │ 33 │   │ 34 │ 35│ 36 │ 37 │ 38 │ 39 │ 40 │ 41 │  Row 2 (14)
+└────┴────┴────┼────┼────┼────┤   └────┴───┘────┼────┼────┼────┴────┴────┘
+               │ 42 │ 43 │ 44 │            │ 45 │ 46 │ 47 │                 Thumbs (6)
+               └────┴────┴────┘            └────┴────┴────┘
 
-Total: 48 keys | Positions 0-47 (0-indexed)
+Total: 48 keys | Positions 0-47 (left-to-right, 0-indexed)
 ```
 
 **Layer 0 (QWERTY) Current Mapping**:
@@ -316,40 +316,9 @@ macros {
 - Release: Returns to base layer
 - Example: `&mo 1` switches to Layer 1 while held
 
-### Key Position Reference
+### Example Combo Positions
 
-48-key layout positions (0-indexed, left-to-right):
-```
-Row 0: 0-12   (6 LEFT + 1 CENTER + 6 RIGHT)
-Row 1: 13-27  (6 LEFT + 3 CENTER + 6 RIGHT)
-Row 2: 28-41  (6 LEFT + 2 CENTER + 6 RIGHT)
-Row 3: 42-47  (3 LEFT thumbs + 3 RIGHT thumbs)
-```
-
-## Key Position Reference (ZMK Array Indices)
-
-**CRITICAL**: ZMK keymaps use 0-indexed positions, left-to-right across each row including center column.
-
-```
-    LEFT SPLIT (6)      CENTER       RIGHT SPLIT (6)
-┌────┬───┬───┬───┬───┬───┐ ┌────┐ ┌───┬───┬───┬───┬───┬───┐
-│ 0  │ 1 │ 2 │ 3 │ 4 │ 5 │ │ 6  │ │ 7 │ 8 │ 9 │10 │11 │12 │  Row 0 (13 keys)
-├────┼───┼───┼───┼───┼───┤┌┼────┼┐├───┼───┼───┼───┼───┼───┤
-│ 13 │14 │15 │16 │17 │18 ││19│ 20││21││22 │23 │24 │25 │26 │27 │  Row 1 (15 keys)
-├────┼───┼───┼───┼───┼───┤└┼────┼┘├───┼───┼───┼───┼───┼───┤
-│ 28 │29 │30 │31 │32 │33 │ │ 34 │35│ │36 │37 │38 │39 │40 │41 │  Row 2 (14 keys)
-└────┴───┴───┼───┼───┼───┤ └────┘ ├───┼───┼───┼───┴───┴───┘
-            │42 │43 │44 │        │45 │46 │47 │              Row 3 (6 keys)
-            └───┴───┴───┘        └───┴───┴───┘
-```
-
-**Current Layer 0 Mapping:**
-- Row 0: 0=Backtick/Tilde, 1=Q, 2=W, 3=E, 4=R, 5=T, 6=UP, 7=Y, 8=U, 9=I, 10=O, 11=LEFT, 12=RIGHT
-- Row 1: 13=LSHIFT, 14=A, 15=S, 16=D, 17=F, 18=G, 19=LEFT, 20=ENTER, 21=RIGHT, 22=H, 23=J, 24=K, 25=L, 26=P, 27=OneShot-Shift
-- Row 2: 28=CAPS, 29=Z, 30=X, 31=C, 32=V, 33=B, 34=SPACE, 35=DOWN, 36=N, 37=M, 38=Comma, 39=Dot, 40=Slash, 41=RSHIFT
-- Row 3: 42=GUI, 43=SPACE, 44=ENTER, 45=ESC/BSPC, 46=mo(1), 47=mo(2)
-
-**Example Combo Positions:**
+For reference when defining combos:
 - S+D (CTRL): `<15 16>`
 - D+F (ALT): `<16 17>`
 - F+G (CMD): `<17 18>`
@@ -358,7 +327,7 @@ Row 3: 42-47  (3 LEFT thumbs + 3 RIGHT thumbs)
 - K+L (CTRL): `<24 25>`
 - R+G (Input Switch): `<4 18>`
 
-**Important**: When defining combos, always use this position map. The center column occupies positions 6, 19-21, 34-35.
+**Important**: Center column occupies positions 6, 19-21, 34-35.
 
 ## Keymap Visualization
 
