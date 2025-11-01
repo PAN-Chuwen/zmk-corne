@@ -1,4 +1,4 @@
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 800   // Slower fixed speed
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1600  // Fixed speed, no acceleration
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 25
 
 #include <input/processors.dtsi>
