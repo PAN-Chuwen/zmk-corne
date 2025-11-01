@@ -46,7 +46,7 @@ layers:
   - LGUI
   - $$mdi:keyboard-space$$
   - {t: '$$mdi:keyboard-return$$', type: enter}
-  - '&td_bspc_del'
+  - {t: '$$mdi:backspace$$', type: backspace}
   - NUMBER
   - NAV
   NUMBER:
