@@ -1,7 +1,7 @@
 layout: {zmk_keyboard: eyeslash_corne}
 layers:
   QWERTY:
-  - '&input_switch'
+  - '&td_backtick'
   - Q
   - W
   - E
@@ -14,7 +14,7 @@ layers:
   - O
   - $$mdi:arrow-left-bold$$
   - $$mdi:arrow-right-bold$$
-  - '&td0'
+  - $$mdi:apple-keyboard-shift$$
   - A
   - S
   - D
@@ -28,8 +28,8 @@ layers:
   - K
   - L
   - P
-  - $$mdi:apple-keyboard-shift$$
-  - $$mdi:apple-keyboard-shift$$
+  - {t: '$$mdi:apple-keyboard-shift$$', h: '$$mdi:gesture-tap-hold$$'}
+  - $$mdi:apple-keyboard-caps$$
   - Z
   - X
   - C
@@ -46,107 +46,107 @@ layers:
   - LGUI
   - $$mdi:keyboard-space$$
   - {t: '$$mdi:keyboard-return$$', type: enter}
-  - {t: '$$mdi:backspace$$', type: backspace}
+  - '&td0'
   - NUMBER
-  - NAV
+  - {t: '$$mdi:backspace$$', type: backspace}
   NUMBER:
-  - {t: '$$mdi:transfer$$', type: trans}
+  - '&td_backtick'
+  - '&td_backtick'
+  - '?'
+  - {t: ., s: '>'}
+  - '&td_paren'
+  - '&td_brace'
+  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
+  - {t: Ctl+-, s: Ctl+_}
   - {t: '1', s: '!'}
   - {t: '2', s: '@'}
   - {t: '3', s: '#'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:keyboard-return$$', type: enter}
+  - $$mdi:apple-keyboard-shift$$
+  - _
+  - '&td_colon'
+  - '&td_quote'
+  - {t: ',', s: <}
+  - {t: '=', s: +}
+  - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
+  - $$mdi:mouse-left-click-outline$$
+  - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
   - {t: '4', s: $}
   - {t: '5', s: '%'}
-  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
   - {t: '6', s: ^}
   - {t: '7', s: '&'}
+  - {t: '0', s: )}
+  - $$mdi:apple-keyboard-shift$$
+  - $$mdi:apple-keyboard-shift$$
+  - '&td_pipe'
+  - '&td_bracket'
+  - +
+  - {t: '-', s: _}
+  - {t: /, s: '?'}
+  - $$mdi:volume-off$$
+  - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
+  - '&td_angle'
   - {t: '8', s: '*'}
   - {t: '9', s: (}
   - {t: '0', s: )}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:apple-keyboard-shift$$
+  - LGUI
+  - $$mdi:keyboard-space$$
+  - {t: '$$mdi:keyboard-return$$', type: enter}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: held}
   - {t: '$$mdi:backspace$$', type: backspace}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - BT CLR ALL
-  - {h: '1', s: '$$mdi:bluetooth-connect$$'}
-  - {h: '2', s: '$$mdi:bluetooth-connect$$'}
-  - {h: '3', s: '$$mdi:bluetooth-connect$$'}
-  - {h: '4', s: '$$mdi:bluetooth-connect$$'}
-  - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
-  - $$mdi:mouse-left-click-outline$$
-  - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
+  NAV:
+  - $$mdi:keyboard-tab$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
+  - $$mdi:apple-keyboard-option$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:arrow-left-bold$$
-  - $$mdi:arrow-up-bold$$
   - $$mdi:arrow-right-bold$$
-  - HOME
-  - PG UP
-  - {t: '$$mdi:transfer$$', type: trans}
-  - RGB OFF
-  - RGB ON
-  - EP OFF
-  - {t: '$$mdi:transfer$$', type: trans}
-  - RGB EFF
-  - $$mdi:volume-off$$
-  - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
-  - RGB EFR
-  - RGB SPI
-  - RGB BRI
-  - RGB BRD
-  - END
-  - PG DN
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - INS
-  - {type: held}
-  - {t: '$$mdi:transfer$$', type: trans}
-  NAV:
-  - {t: '$$mdi:transfer$$', type: trans}
-  - '!'
-  - '@'
-  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
-  - $
-  - '%'
-  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
-  - ^
-  - '&'
-  - '*'
-  - (
-  - )
-  - {t: '$$mdi:backspace$$', type: backspace}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:arrow-up-bold$$
+  - {t: '$$mdi:keyboard-return$$', type: enter}
+  - $$mdi:apple-keyboard-shift$$
+  - $$mdi:apple-keyboard-control$$
   - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
   - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
   - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
-  - '&mkp MB4'
+  - LGUI
   - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
   - $$mdi:mouse-left-click-outline$$
   - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
-  - {t: '-', s: _}
-  - {t: '=', s: +}
-  - {t: '[', s: '{'}
-  - {t: ']', s: '}'}
+  - $$mdi:play-pause$$
+  - $$mdi:arrow-left-bold$$
+  - PG UP
+  - HOME
+  - $$mdi:arrow-down-bold$$
+  - F12
+  - $$mdi:apple-keyboard-shift$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: \, s: '|'}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - OUT USB
-  - OUT BLE
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - '&mkp MB5'
+  - Hyper+F
+  - Hyper+D
+  - Hyper+G
+  - Hyper+C
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
-  - _
-  - +
-  - '{'
-  - '}'
-  - '|'
-  - '~'
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - $$mdi:keyboard-space$$
+  - $$mdi:volume-off$$
+  - PG DN
+  - END
+  - $$mdi:arrow-right-bold$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:apple-keyboard-shift$$
+  - '&gui_shift_click'
+  - $$mdi:mouse-left-click-outline$$
+  - $$mdi:mouse-right-click-outline$$
+  - {t: '$$mdi:keyboard-return$$', type: enter}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {type: held}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
   Fn:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -199,15 +199,43 @@ layers:
 combos:
 - p: [1, 2]
   k: $$mdi:keyboard-esc$$
+- p: [30, 31]
+  k: $$mdi:keyboard-tab$$
+- p: [16, 17]
+  k: $$mdi:apple-keyboard-control$$
+- p: [17, 18]
+  k: $$mdi:apple-keyboard-option$$
+- p: [18, 19]
+  k: LGUI
 - p: [22, 23]
   k: LGUI
 - p: [23, 24]
   k: $$mdi:apple-keyboard-option$$
 - p: [24, 25]
   k: $$mdi:apple-keyboard-control$$
+- p: [16, 17, 18]
+  k: Ctl+$$mdi:apple-keyboard-option$$
+- p: [16, 17, 19]
+  k: Gui+$$mdi:apple-keyboard-control$$
+- p: [17, 18, 19]
+  k: {t: 'Gui+$$mdi:apple-keyboard-option$$', h: '$$mdi:gesture-tap-hold$$'}
+- p: [16, 17, 18, 19]
+  k: Gui+Ctl+Alt+$$mdi:apple-keyboard-shift$$
 - p: [22, 23, 24]
-  k: Gui+$$mdi:apple-keyboard-option$$
+  k: {t: 'Gui+$$mdi:apple-keyboard-option$$', h: '$$mdi:gesture-tap-hold$$'}
 - p: [23, 24, 25]
   k: Alt+$$mdi:apple-keyboard-control$$
 - p: [38, 39]
   k: Gui+$$mdi:apple-keyboard-control$$
+- p: [22, 23, 24, 25]
+  k: Gui+Ctl+Alt+$$mdi:apple-keyboard-shift$$
+- p: [8, 9]
+  k: $$mdi:arrow-left-bold$$
+- p: [9, 10]
+  k: $$mdi:arrow-right-bold$$
+- p: [8, 24]
+  k: $$mdi:arrow-down-bold$$
+- p: [9, 25]
+  k: $$mdi:arrow-up-bold$$
+- p: [4, 19]
+  k: '&input_switch'
