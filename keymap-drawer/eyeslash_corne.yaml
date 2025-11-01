@@ -46,9 +46,9 @@ layers:
   - LGUI
   - $$mdi:keyboard-space$$
   - {t: '$$mdi:keyboard-return$$', type: enter}
-  - '&td0'
+  - '&td_esc_bspc'
   - NUMBER
-  - {t: '$$mdi:backspace$$', type: backspace}
+  - NAV
   NUMBER:
   - '&td_backtick'
   - '&td_backtick'
@@ -146,7 +146,7 @@ layers:
   - $$mdi:mouse-right-click-outline$$
   - {t: '$$mdi:keyboard-return$$', type: enter}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: held}
   Fn:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -201,11 +201,11 @@ combos:
   k: $$mdi:keyboard-esc$$
 - p: [30, 31]
   k: $$mdi:keyboard-tab$$
-- p: [16, 17]
+- p: [15, 16]
   k: $$mdi:apple-keyboard-control$$
-- p: [17, 18]
+- p: [16, 17]
   k: $$mdi:apple-keyboard-option$$
-- p: [18, 19]
+- p: [17, 18]
   k: LGUI
 - p: [22, 23]
   k: LGUI
@@ -213,13 +213,13 @@ combos:
   k: $$mdi:apple-keyboard-option$$
 - p: [24, 25]
   k: $$mdi:apple-keyboard-control$$
-- p: [16, 17, 18]
+- p: [15, 16, 17]
   k: Ctl+$$mdi:apple-keyboard-option$$
-- p: [16, 17, 19]
+- p: [15, 16, 18]
   k: Gui+$$mdi:apple-keyboard-control$$
-- p: [17, 18, 19]
+- p: [16, 17, 18]
   k: {t: 'Gui+$$mdi:apple-keyboard-option$$', h: '$$mdi:gesture-tap-hold$$'}
-- p: [16, 17, 18, 19]
+- p: [15, 16, 17, 18]
   k: Gui+Ctl+Alt+$$mdi:apple-keyboard-shift$$
 - p: [22, 23, 24]
   k: {t: 'Gui+$$mdi:apple-keyboard-option$$', h: '$$mdi:gesture-tap-hold$$'}
@@ -237,5 +237,5 @@ combos:
   k: $$mdi:arrow-down-bold$$
 - p: [9, 25]
   k: $$mdi:arrow-up-bold$$
-- p: [4, 19]
+- p: [4, 18]
   k: '&input_switch'
