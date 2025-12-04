@@ -1,14 +1,26 @@
-# ZMK Corne Dongle Configuration
+# ZMK Corne Configuration
 
-Custom ZMK firmware configuration for the Eyeslash Corne split keyboard with USB dongle.
+Custom ZMK firmware configuration for the Eyeslash Corne split keyboard.
 
-**Repository**: Forked from [tokyo2006/zmk-corne-dongle](https://github.com/tokyo2006/zmk-corne-dongle)
+This repository supports **TWO keyboard variants**:
+
+| Variant | Repository | Display | Connection |
+|---------|------------|---------|------------|
+| **Dongle (OLED)** | [zmk-corne-dongle](https://github.com/PAN-Chuwen/zmk-corne-config) | OLED | Dongle + Left + Right |
+| **Choc (LCD)** | [zmk-choc-corne](https://github.com/PAN-Chuwen/zmk-choc-corne) | LCD (nice_view) | Left + Right only |
 
 ## Hardware
 
+### Dongle Version (OLED)
 - **LEFT/RIGHT keyboards**: Bluetooth peripherals with OLED displays
 - **USB Dongle**: Bluetooth central (connects to Mac via USB)
 - **Connection**: Keyboards → Dongle (Bluetooth) → Mac (USB)
+
+### Choc Version (LCD) - Low Profile
+- **LEFT keyboard**: USB connection to Mac, Bluetooth central
+- **RIGHT keyboard**: Bluetooth peripheral
+- **Connection**: RIGHT → LEFT (Bluetooth) → Mac (USB)
+- **Display**: LCD (nice_view)
 
 ## Keyboard Layout
 
@@ -190,6 +202,43 @@ cp output/github/dongle.uf2 /Volumes/NICENANO/
 - Flash all 3 devices when updating keymap
 - Flash order doesn't matter
 - If a device doesn't work, try settings_reset.uf2 first, then reflash
+
+---
+
+## Choc (LCD) Keyboard Workflow
+
+The Choc version uses a separate GitHub repository with the same keymap.
+
+### 1. Edit Keymap (Same keymap file!)
+The keymap is shared. Edit locally and push to both repos:
+```bash
+# Edit keymap
+vim config/eyeslash_corne.keymap
+
+# Push to Choc repo
+cd ~/zmk-choc-corne  # Clone from PAN-Chuwen/zmk-choc-corne
+cp ~/zmk-corne-config/config/eyeslash_corne.keymap config/eyelash_corne.keymap
+git add . && git commit -m "feat: update keymap" && git push
+```
+
+### 2. Download Choc Firmware
+```bash
+# From this repo, download from Choc GitHub Actions
+./download-choc-firmware.sh
+
+# Or manually:
+gh run list --repo PAN-Chuwen/zmk-choc-corne --limit 1
+gh run download <RUN_ID> --repo PAN-Chuwen/zmk-choc-corne --dir output/choc/github
+```
+
+### 3. Flash Choc Firmware
+```bash
+./flash-choc.sh
+# Only flashes LEFT and RIGHT (no dongle needed)
+# LEFT connects via USB, RIGHT connects via Bluetooth to LEFT
+```
+
+---
 
 ## Build System Details
 
