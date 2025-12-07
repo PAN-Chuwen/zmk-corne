@@ -201,6 +201,8 @@ combos:
   k: $$mdi:keyboard-esc$$
 - p: [30, 31]
   k: $$mdi:keyboard-tab$$
+- p: [29, 30]
+  k: $$mdi:keyboard-tab-reverse$$
 - p: [15, 16]
   k: $$mdi:apple-keyboard-control$$
 - p: [16, 17]
