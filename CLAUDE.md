@@ -64,7 +64,7 @@ Thumb: 42=⌘ 43=␣ 44=⏎  45=⌫  46=L1  47=L2
 **Advanced Features Implemented**:
 - **Macros**: Top-left key triggers Ctrl+Space (Mac input switching)
 - **Tap-Dance**: td0 on left (Shift/Layer2) - originally TAB was backtick/tilde
-- **Combo Keys**: Q+W = ESC, X+C = TAB (50ms timeout)
+- **Combo Keys**: Q+W = ESC, Z+X = Shift+TAB, X+C = TAB (50ms timeout)
 - **Modifier Combos** (both splits, with slow-release):
   - LEFT: S+D = CTRL, D+F = ALT, F+G = CMD
   - RIGHT: H+J = CMD, J+K = OPTION, K+L = CTRL

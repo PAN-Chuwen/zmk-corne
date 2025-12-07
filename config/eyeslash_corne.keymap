@@ -149,6 +149,11 @@
             key-positions = <30 31>;  // X+C
             bindings = <&kp TAB>;
         };
+        combo_shift_tab {
+            timeout-ms = <50>;
+            key-positions = <29 30>;  // Z+X
+            bindings = <&kp LS(TAB)>;
+        };
 
         // Left-hand modifier combos
         combo_left_ctrl {
