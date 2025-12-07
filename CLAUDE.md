@@ -101,8 +101,8 @@ Thumb: 42=⌘ 43=␣ 44=⏎  45=⌫  46=L1  47=L2
 ├── CLAUDE.md                     # This documentation
 │
 ├── output/                       # Firmware outputs (gitignored)
-│   ├── dongle/                   # Dongle firmware (dongle.uf2, left.uf2, right.uf2)
-│   └── choc/                     # Choc firmware (left.uf2, right.uf2)
+│   ├── dongle/                   # dongle.uf2, left.uf2, right.uf2, settings_reset.uf2
+│   └── choc/                     # left.uf2, right.uf2, settings_reset.uf2
 │
 └── vendor/                       # Reference materials
     ├── docs/                     # Vendor documentation
