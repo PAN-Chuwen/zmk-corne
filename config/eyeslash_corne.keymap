@@ -242,17 +242,17 @@
             slow-release;
         };
 
-        // Navigation arrow combos
-        combo_arrow_left {
-            timeout-ms = <50>;
-            key-positions = <8 9>;  // U+I
-            bindings = <&kp LEFT>;
-        };
-        combo_arrow_right {
-            timeout-ms = <50>;
-            key-positions = <9 10>;  // I+O
-            bindings = <&kp RIGHT>;
-        };
+        // Navigation arrow combos (U+I and I+O disabled)
+        // combo_arrow_left {
+        //     timeout-ms = <50>;
+        //     key-positions = <8 9>;  // U+I
+        //     bindings = <&kp LEFT>;
+        // };
+        // combo_arrow_right {
+        //     timeout-ms = <50>;
+        //     key-positions = <9 10>;  // I+O
+        //     bindings = <&kp RIGHT>;
+        // };
         combo_arrow_down {
             timeout-ms = <50>;
             key-positions = <8 24>;  // U+K
@@ -322,11 +322,11 @@
             display-name = "NAV";
             bindings = <
 // Row 0: LEFT (6 keys) + CENTER (1 key) + RIGHT (6 keys)
-&kp TAB    &none      &none         &mmv MOVE_UP  &kp LALT   &none                              &mmv MOVE_UP                              &none     &none     &kp LEFT  &kp RIGHT &kp UP    &kp ENTER
+&kp TAB    &none      &none         &mmv MOVE_UP  &kp LALT   &none                              &mmv MOVE_UP                              &none     &none     &none     &kp LEFT  &kp RIGHT &kp ENTER
 // Row 1: LEFT (6 keys) + CENTER (3 keys) + RIGHT (6 keys)
-&kp LSHIFT &kp LCTRL  &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &kp LGUI  &mmv MOVE_LEFT  &mkp LCLK      &mmv MOVE_RIGHT  &kp C_PP  &kp LEFT  &kp PG_UP &kp HOME  &kp DOWN  &kp F12
+&kp LSHIFT &kp LCTRL  &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &kp LGUI  &mmv MOVE_LEFT  &mkp LCLK      &mmv MOVE_RIGHT  &kp C_PP  &none     &kp PG_UP &kp HOME  &none     &kp RSHIFT
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
-&kp LSHIFT &none      &kp LG(LS(LC(LA(F)))) &kp LG(LS(LC(LA(D)))) &kp LG(LS(LC(LA(G)))) &kp LG(LS(LC(LA(C)))) &trans  &mmv MOVE_DOWN  &kp C_MUTE &kp PG_DN &kp END   &kp RIGHT &none     &kp RSHIFT
+&kp LSHIFT &none      &kp LG(LS(LC(LA(F)))) &kp LG(LS(LC(LA(D)))) &kp LG(LS(LC(LA(G)))) &kp LG(LS(LC(LA(C)))) &trans  &mmv MOVE_DOWN  &kp C_MUTE &kp PG_DN &kp END   &none     &none     &kp RSHIFT
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
                                     &gui_shift_click &mkp LCLK  &mkp RCLK                                                              &kp ENTER &trans    &none
             >;
@@ -339,9 +339,9 @@
 // Row 0: LEFT (6 keys) + CENTER (1 key) + RIGHT (6 keys)
 &trans         &none       &kp F1      &kp F2        &kp F3     &kp F4                             &mmv MOVE_UP                              &kp F5        &none         &kp F6        &kp F7        &kp F8        &kp F9
 // Row 1: LEFT (6 keys) + CENTER (3 keys) + RIGHT (6 keys)
-&trans         &trans      &mkp LCLK   &mkp MCLK     &mkp RCLK  &mkp MB4      &mmv MOVE_LEFT  &mkp LCLK      &mmv MOVE_RIGHT  &bootloader   &mkp LCLK     &mkp MCLK     &mkp RCLK     &kp F10       &kp F11
+&kp LSHIFT     &trans      &mkp LCLK   &mkp MCLK     &mkp RCLK  &mkp MB4      &mmv MOVE_LEFT  &mkp LCLK      &mmv MOVE_RIGHT  &bootloader   &mkp LCLK     &mkp MCLK     &mkp RCLK     &kp F10       &kp RSHIFT
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
-&trans         &sys_reset  &soft_off   &bootloader   &trans     &mkp MB5      &kp C_MUTE                    &mmv MOVE_DOWN              &trans        &trans        &bootloader   &sys_reset    &kp PSCRN     &kp F12
+&kp LSHIFT     &sys_reset  &soft_off   &bootloader   &trans     &mkp MB5      &kp C_MUTE                    &mmv MOVE_DOWN              &trans        &trans        &bootloader   &sys_reset    &kp PSCRN     &kp RSHIFT
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
                                        &trans        &trans     &trans                                                                  &trans        &trans        &trans
             >;
