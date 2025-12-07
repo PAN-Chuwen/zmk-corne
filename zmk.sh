@@ -219,7 +219,7 @@ wait_for_device() {
 
     echo ""
     print_info "Waiting for $device_name to enter bootloader..."
-    echo "    (Double-press RESET button now)"
+    echo "    (Double-tap RESET button now)"
 
     local elapsed=0
     while [ ! -d "/Volumes/NICENANO" ] && [ $elapsed -lt $max_wait ]; do
