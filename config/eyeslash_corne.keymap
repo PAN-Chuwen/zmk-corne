@@ -28,14 +28,6 @@
 
 / {
     behaviors {
-        td0: td0 {
-            compatible = "zmk,behavior-tap-dance";
-            display-name = "OneShot-Shift/Layer2";
-            #binding-cells = <0>;
-            tapping-term-ms = <100>;
-            bindings = <&sk LSHIFT>, <&mo 2>;
-        };
-
         td_backtick: td_backtick {
             compatible = "zmk,behavior-tap-dance";
             display-name = "Backtick/Tilde";
@@ -100,13 +92,6 @@
             bindings = <&kp LT>, <&kp GT>;
         };
 
-        td_bspc_del: td_bspc_del {
-            compatible = "zmk,behavior-tap-dance";
-            display-name = "Backspace/Delete";
-            #binding-cells = <0>;
-            tapping-term-ms = <200>;
-            bindings = <&kp BSPC>, <&kp DEL>;
-        };
     };
 
     macros {
