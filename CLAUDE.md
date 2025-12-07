@@ -12,11 +12,8 @@ This repository manages **TWO keyboard variants**:
 ## Quick Start
 
 ```bash
-# Build both keyboards (triggers GitHub Actions)
+# Build, wait, and download firmware (all automatic)
 ./zmk.sh build
-
-# Wait for builds and download firmware
-./zmk.sh download --wait
 
 # Flash firmware (interactive menu)
 ./zmk.sh flash
@@ -120,19 +117,15 @@ Thumb: 42=⌘ 43=␣ 44=⏎  45=⌫  46=L1  47=L2
 vim config/eyeslash_corne.keymap
 ```
 
-### 2. Build & Download
+### 2. Build
 
 ```bash
-# Option A: Build both, wait, and download
+# Build both keyboards (waits and downloads automatically)
 ./zmk.sh build
-./zmk.sh download --wait
 
-# Option B: Build and download specific keyboard
+# Build specific keyboard only
 ./zmk.sh build dongle
-./zmk.sh download --wait dongle
-
-# Option C: Just download latest (if already built)
-./zmk.sh download
+./zmk.sh build choc
 ```
 
 ### 3. Flash Firmware
@@ -165,8 +158,7 @@ The Choc keyboard uses a different GitHub repo but shares the same keymap:
 
 | Command | Description |
 |---------|-------------|
-| `./zmk.sh build [dongle\|choc\|both]` | Trigger GitHub Actions build |
-| `./zmk.sh download [--wait] [target]` | Download firmware (--wait waits for build) |
+| `./zmk.sh build [dongle\|choc\|both]` | Build, wait, and download firmware |
 | `./zmk.sh flash` | Interactive firmware flashing |
 | `./zmk.sh status` | Show build status and local firmware |
 | `./zmk.sh sync` | Sync keymap to Choc repo |

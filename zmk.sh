@@ -58,7 +58,7 @@ cmd_build() {
             gh workflow run build.yml --repo "$CHOC_REPO"
             print_success "Choc build triggered"
             ;;
-        both|"")
+        both)
             print_info "Triggering Dongle (OLED) build..."
             gh workflow run build.yml --repo "$DONGLE_REPO"
             print_success "Dongle build triggered"
@@ -74,13 +74,35 @@ cmd_build() {
             ;;
     esac
 
+    # Wait for builds to register then download
     echo ""
-    print_info "Builds are running. Use '$0 download' to download when complete."
-    print_info "Or use '$0 download --wait' to wait and download automatically."
+    print_info "Waiting 5 seconds for builds to register..."
+    sleep 5
+
+    ensure_output_dirs
+    wait_for_builds "$target"
+
+    # Download firmware
+    print_header "Downloading Firmware"
+    case "$target" in
+        dongle)
+            download_firmware "$DONGLE_REPO" "dongle" "Dongle"
+            ;;
+        choc)
+            download_firmware "$CHOC_REPO" "choc" "Choc"
+            ;;
+        both)
+            download_firmware "$DONGLE_REPO" "dongle" "Dongle"
+            download_firmware "$CHOC_REPO" "choc" "Choc"
+            ;;
+    esac
+
+    echo ""
+    print_success "Build complete! Use '$0 flash' to flash the firmware."
 }
 
 # ============================================
-# DOWNLOAD COMMAND
+# HELPER FUNCTIONS FOR BUILD
 # ============================================
 get_latest_run_id() {
     local repo="$1"
@@ -186,53 +208,6 @@ download_firmware() {
     rm -rf "$dest/firmware"
 
     print_success "$repo_name firmware downloaded to $dest/"
-}
-
-cmd_download() {
-    local wait_flag=false
-    local target="both"
-
-    # Parse arguments
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-            --wait|-w)
-                wait_flag=true
-                shift
-                ;;
-            dongle|choc|both)
-                target="$1"
-                shift
-                ;;
-            *)
-                shift
-                ;;
-        esac
-    done
-
-    ensure_output_dirs
-    print_header "Downloading Firmware"
-
-    # Wait for builds if requested
-    if [ "$wait_flag" = true ]; then
-        wait_for_builds "$target"
-    fi
-
-    # Download firmware
-    case "$target" in
-        dongle)
-            download_firmware "$DONGLE_REPO" "dongle" "Dongle"
-            ;;
-        choc)
-            download_firmware "$CHOC_REPO" "choc" "Choc"
-            ;;
-        both)
-            download_firmware "$DONGLE_REPO" "dongle" "Dongle"
-            download_firmware "$CHOC_REPO" "choc" "Choc"
-            ;;
-    esac
-
-    echo ""
-    print_info "Use '$0 flash' to flash the firmware"
 }
 
 # ============================================
@@ -420,29 +395,23 @@ cmd_help() {
     echo "Usage: $0 <command> [options]"
     echo ""
     echo "Commands:"
-    echo "  build [dongle|choc|both]     Trigger GitHub Actions build"
-    echo "  download [--wait] [target]   Download firmware (--wait to wait for build)"
+    echo "  build [dongle|choc|both]     Build firmware (waits and downloads automatically)"
     echo "  flash                        Flash firmware to keyboard"
     echo "  status                       Show build status and local firmware"
     echo "  sync                         Sync keymap to Choc repo"
     echo "  help                         Show this help"
     echo ""
     echo "Examples:"
-    echo "  $0 build                     # Build both keyboards"
+    echo "  $0 build                     # Build both keyboards, wait, download"
     echo "  $0 build dongle              # Build only dongle"
-    echo "  $0 download --wait           # Wait for build then download"
     echo "  $0 flash                     # Flash firmware (interactive)"
-    echo "  $0 sync                      # Sync keymap then build choc"
+    echo "  $0 sync                      # Sync keymap to Choc repo"
 }
 
 case "${1:-help}" in
     build)
         shift
         cmd_build "$@"
-        ;;
-    download)
-        shift
-        cmd_download "$@"
         ;;
     flash)
         cmd_flash
