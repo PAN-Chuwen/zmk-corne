@@ -42,7 +42,10 @@ ensure_output_dirs() {
 # ============================================
 # BUILD COMMAND
 # ============================================
-sync_keymap_to_choc() {
+sync_keymap() {
+    local repo="$1"
+    local remote_path="$2"
+    local repo_name="$3"
     local keymap_file="config/eyeslash_corne.keymap"
 
     if [ ! -f "$keymap_file" ]; then
@@ -50,36 +53,41 @@ sync_keymap_to_choc() {
         return 1
     fi
 
-    print_info "Syncing keymap to Choc repo..."
+    print_info "Syncing keymap to $repo_name..."
 
     # Get current SHA
     local sha
-    sha=$(gh api "repos/$CHOC_REPO/contents/config/eyelash_corne.keymap" --jq '.sha' 2>/dev/null || echo "")
+    sha=$(gh api "repos/$repo/contents/$remote_path" --jq '.sha' 2>/dev/null || echo "")
 
     # Upload
     if [ -n "$sha" ]; then
-        gh api --method PUT "repos/$CHOC_REPO/contents/config/eyelash_corne.keymap" \
-            -f message="feat: sync keymap from dongle repo" \
+        gh api --method PUT "repos/$repo/contents/$remote_path" \
+            -f message="feat: sync keymap" \
             -f content="$(base64 < "$keymap_file")" \
             -f sha="$sha" > /dev/null
     else
-        gh api --method PUT "repos/$CHOC_REPO/contents/config/eyelash_corne.keymap" \
-            -f message="feat: sync keymap from dongle repo" \
+        gh api --method PUT "repos/$repo/contents/$remote_path" \
+            -f message="feat: sync keymap" \
             -f content="$(base64 < "$keymap_file")" > /dev/null
     fi
 
-    print_success "Keymap synced"
+    print_success "$repo_name synced"
 }
 
 cmd_build() {
     local target="${1:-both}"
 
-    print_header "Triggering GitHub Actions Build"
+    print_header "Syncing Keymap"
 
-    # Auto-sync keymap to choc repo before building choc
-    if [ "$target" = "choc" ] || [ "$target" = "both" ]; then
-        sync_keymap_to_choc
+    # Auto-sync keymap to repos before building
+    if [ "$target" = "dongle" ] || [ "$target" = "both" ]; then
+        sync_keymap "$DONGLE_REPO" "config/eyeslash_corne.keymap" "Dongle"
     fi
+    if [ "$target" = "choc" ] || [ "$target" = "both" ]; then
+        sync_keymap "$CHOC_REPO" "config/eyelash_corne.keymap" "Choc"
+    fi
+
+    print_header "Triggering GitHub Actions Build"
 
     case "$target" in
         dongle)
