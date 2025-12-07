@@ -42,10 +42,44 @@ ensure_output_dirs() {
 # ============================================
 # BUILD COMMAND
 # ============================================
+sync_keymap_to_choc() {
+    local keymap_file="config/eyeslash_corne.keymap"
+
+    if [ ! -f "$keymap_file" ]; then
+        print_error "Keymap not found: $keymap_file"
+        return 1
+    fi
+
+    print_info "Syncing keymap to Choc repo..."
+
+    # Get current SHA
+    local sha
+    sha=$(gh api "repos/$CHOC_REPO/contents/config/eyelash_corne.keymap" --jq '.sha' 2>/dev/null || echo "")
+
+    # Upload
+    if [ -n "$sha" ]; then
+        gh api --method PUT "repos/$CHOC_REPO/contents/config/eyelash_corne.keymap" \
+            -f message="feat: sync keymap from dongle repo" \
+            -f content="$(base64 < "$keymap_file")" \
+            -f sha="$sha" > /dev/null
+    else
+        gh api --method PUT "repos/$CHOC_REPO/contents/config/eyelash_corne.keymap" \
+            -f message="feat: sync keymap from dongle repo" \
+            -f content="$(base64 < "$keymap_file")" > /dev/null
+    fi
+
+    print_success "Keymap synced"
+}
+
 cmd_build() {
     local target="${1:-both}"
 
     print_header "Triggering GitHub Actions Build"
+
+    # Auto-sync keymap to choc repo before building choc
+    if [ "$target" = "choc" ] || [ "$target" = "both" ]; then
+        sync_keymap_to_choc
+    fi
 
     case "$target" in
         dongle)
@@ -361,40 +395,6 @@ cmd_status() {
 }
 
 # ============================================
-# SYNC COMMAND - Sync keymap to choc repo
-# ============================================
-cmd_sync() {
-    print_header "Sync Keymap to Choc Repo"
-
-    local keymap_file="config/eyeslash_corne.keymap"
-
-    if [ ! -f "$keymap_file" ]; then
-        print_error "Keymap not found: $keymap_file"
-        exit 1
-    fi
-
-    print_info "Uploading keymap to $CHOC_REPO..."
-
-    # Get current SHA
-    local sha
-    sha=$(gh api "repos/$CHOC_REPO/contents/config/eyelash_corne.keymap" --jq '.sha' 2>/dev/null || echo "")
-
-    # Upload
-    if [ -n "$sha" ]; then
-        gh api --method PUT "repos/$CHOC_REPO/contents/config/eyelash_corne.keymap" \
-            -f message="feat: sync keymap from dongle repo" \
-            -f content="$(base64 < "$keymap_file")" \
-            -f sha="$sha"
-    else
-        gh api --method PUT "repos/$CHOC_REPO/contents/config/eyelash_corne.keymap" \
-            -f message="feat: sync keymap from dongle repo" \
-            -f content="$(base64 < "$keymap_file")"
-    fi
-
-    print_success "Keymap synced to Choc repo"
-}
-
-# ============================================
 # MAIN
 # ============================================
 cmd_help() {
@@ -403,17 +403,15 @@ cmd_help() {
     echo "Usage: $0 <command> [options]"
     echo ""
     echo "Commands:"
-    echo "  build [dongle|choc|both]     Build firmware (waits and downloads automatically)"
+    echo "  build [dongle|choc|both]     Build firmware (auto-syncs keymap, waits, downloads)"
     echo "  flash                        Flash firmware to keyboard"
     echo "  status                       Show build status and local firmware"
-    echo "  sync                         Sync keymap to Choc repo"
     echo "  help                         Show this help"
     echo ""
     echo "Examples:"
-    echo "  $0 build                     # Build both keyboards, wait, download"
+    echo "  $0 build                     # Build both keyboards"
     echo "  $0 build dongle              # Build only dongle"
     echo "  $0 flash                     # Flash firmware (interactive)"
-    echo "  $0 sync                      # Sync keymap to Choc repo"
 }
 
 case "${1:-help}" in
@@ -426,9 +424,6 @@ case "${1:-help}" in
         ;;
     status)
         cmd_status
-        ;;
-    sync)
-        cmd_sync
         ;;
     help|--help|-h)
         cmd_help
