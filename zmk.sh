@@ -303,25 +303,33 @@ cmd_flash() {
     done
 
     # Ask about settings reset
+    local do_reset=false
     echo ""
     read -n 1 -p "Reset settings first? (recommended for first flash) [y/N]: " reset_choice
     echo ""
 
     if [ "$reset_choice" = "y" ] || [ "$reset_choice" = "Y" ]; then
         if [ -f "$firmware_dir/settings_reset.uf2" ]; then
-            for device in "${devices[@]}"; do
-                print_header "Reset $device"
-                flash_file "$device (reset)" "$firmware_dir/settings_reset.uf2"
-            done
+            do_reset=true
         else
             print_error "settings_reset.uf2 not found, skipping reset"
         fi
     fi
 
-    # Flash each device
+    # Flash each device (reset + flash in one go per device)
     for device in "${devices[@]}"; do
-        print_header "Flash $device"
-        flash_file "$device" "$firmware_dir/$device.uf2"
+        if [ "$do_reset" = true ]; then
+            print_header "Flash $device (reset + firmware)"
+            # First: reset
+            print_info "Step 1: Flashing settings_reset..."
+            flash_file "$device (reset)" "$firmware_dir/settings_reset.uf2"
+            # Second: firmware (same device, need to enter bootloader again)
+            print_info "Step 2: Flashing firmware..."
+            flash_file "$device" "$firmware_dir/$device.uf2"
+        else
+            print_header "Flash $device"
+            flash_file "$device" "$firmware_dir/$device.uf2"
+        fi
     done
 
     print_header "Complete!"
