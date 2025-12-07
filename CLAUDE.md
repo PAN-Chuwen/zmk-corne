@@ -53,9 +53,9 @@ Thumb: 42=⌘ 43=␣ 44=⏎  45=⌫  46=L1  47=L2
 
 **Layers**:
 - Layer 0 (QWERTY): Base typing layer with nav arrows in center column
-- Layer 1 (NUMBER): Numbers, Bluetooth/RGB controls
-- Layer 2 (NAV): Mouse movement (ESDF), symbols, output switching (USB/BLE)
-- Layer 3 (Fn): Function keys, bootloader, system reset
+- Layer 1 (NUMBER): Numbers, symbols, mouse in center column
+- Layer 2 (NAV): Mouse movement (ESDF on left), LEFT/RIGHT arrows on O and next key (right side)
+- Layer 3 (Fn): Function keys, bootloader, system reset, SHIFT on both sides
 
 **Layer 0 Thumb Keys**:
 - LEFT (42-44): GUI, SPACE, ENTER
@@ -64,10 +64,12 @@ Thumb: 42=⌘ 43=␣ 44=⏎  45=⌫  46=L1  47=L2
 **Advanced Features Implemented**:
 - **Macros**: Top-left key triggers Ctrl+Space (Mac input switching)
 - **Tap-Dance**: td0 on left (Shift/Layer2) - originally TAB was backtick/tilde
-- **Combo Keys**: Q+W = ESC (50ms timeout)
-- **Modifier Combos** (RIGHT split, with slow-release):
-  - H+J = CMD, J+K = OPTION, K+L = CTRL
-  - H+J+K = CMD+OPTION, J+K+L = OPTION+CTRL, ,+. = CMD+CTRL
+- **Combo Keys**: Q+W = ESC, X+C = TAB (50ms timeout)
+- **Modifier Combos** (both splits, with slow-release):
+  - LEFT: S+D = CTRL, D+F = ALT, F+G = CMD
+  - RIGHT: H+J = CMD, J+K = OPTION, K+L = CTRL
+  - Multi-key: H+J+K = CMD+OPTION, J+K+L = OPTION+CTRL, ,+. = CMD+CTRL
+- **Arrow Combos**: U+K = DOWN, I+L = UP (U+I and I+O disabled)
 - **Mouse Movement**: Layer 2 (NAV) - E=UP, S=LEFT, D=DOWN, F=RIGHT (continuous while held)
 
 **Important**: ZMK keymap arrays are defined **left-to-right**:
