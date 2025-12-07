@@ -214,12 +214,6 @@
             bindings = <&sk LG(LALT)>;  // One-shot
             slow-release;
         };
-        combo_left_hyper {
-            timeout-ms = <50>;
-            key-positions = <15 16 17 18>;  // S+D+F+G
-            bindings = <&kp LG(LC(LA(LSHIFT)))>;
-            slow-release;
-        };
 
         // Multi-key modifier combos (right hand)
         combo_cmd_opt {
@@ -238,12 +232,6 @@
             timeout-ms = <50>;
             key-positions = <38 39>;  // ,+.
             bindings = <&kp LG(LCTRL)>;
-            slow-release;
-        };
-        combo_right_hyper {
-            timeout-ms = <50>;
-            key-positions = <22 23 24 25>;  // H+J+K+L
-            bindings = <&kp LG(LC(LA(LSHIFT)))>;
             slow-release;
         };
 
