@@ -258,16 +258,7 @@
         //     key-positions = <9 10>;  // I+O
         //     bindings = <&kp RIGHT>;
         // };
-        combo_arrow_down {
-            timeout-ms = <50>;
-            key-positions = <8 24>;  // U+K
-            bindings = <&kp DOWN>;
-        };
-        combo_arrow_up {
-            timeout-ms = <50>;
-            key-positions = <9 25>;  // I+L
-            bindings = <&kp UP>;
-        };
+        // U+K and I+L arrow combos removed - UP/DOWN now on K/L in NAV layer
 
         // Macro combo
         combo_input_switch {
@@ -327,11 +318,11 @@
             display-name = "NAV";
             bindings = <
 // Row 0: LEFT (6 keys) + CENTER (1 key) + RIGHT (6 keys)
-&kp TAB    &none      &none         &mmv MOVE_UP  &kp LALT   &none                              &mmv MOVE_UP                              &none     &none     &none     &kp LEFT  &kp RIGHT &kp ENTER
+&kp TAB    &none      &none         &mmv MOVE_UP  &kp LALT   &none                              &mmv MOVE_UP                              &none     &none     &none     &kp LEFT  &kp RIGHT &kp RSHIFT
 // Row 1: LEFT (6 keys) + CENTER (3 keys) + RIGHT (6 keys)
-&kp LSHIFT &kp LCTRL  &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &kp LGUI  &mmv MOVE_LEFT  &mkp LCLK      &mmv MOVE_RIGHT  &kp C_PP  &none     &kp PG_UP &kp HOME  &none     &kp RSHIFT
+&kp LSHIFT &kp LCTRL  &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &kp LGUI  &mmv MOVE_LEFT  &mkp LCLK      &mmv MOVE_RIGHT  &kp C_PP  &kp PG_UP &kp PG_DN &kp UP    &kp DOWN  &kp RSHIFT
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
-&kp LSHIFT &none      &kp LG(LS(LC(LA(F)))) &kp LG(LS(LC(LA(D)))) &kp LG(LS(LC(LA(G)))) &kp LG(LS(LC(LA(C)))) &trans  &mmv MOVE_DOWN  &kp C_MUTE &kp PG_DN &kp END   &none     &none     &kp RSHIFT
+&kp LSHIFT &none      &kp LG(LS(LC(LA(F)))) &kp LG(LS(LC(LA(D)))) &kp LG(LS(LC(LA(G)))) &kp LG(LS(LC(LA(C)))) &trans  &mmv MOVE_DOWN  &kp C_MUTE &kp HOME  &kp END   &none     &none     &kp RSHIFT
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
                                     &gui_shift_click &mkp LCLK  &mkp RCLK                                                              &kp ENTER &trans    &none
             >;
