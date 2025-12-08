@@ -291,9 +291,9 @@
             display-name = "NAV";
             bindings = <
 // Row 0: LEFT (6 keys) + CENTER (1 key) + RIGHT (6 keys)
-&kp TAB    &none      &none         &mmv MOVE_UP  &kp LALT   &none                              &mmv MOVE_UP                              &none     &none     &kp DOWN  &kp UP    &none     &kp RSHIFT
+&kp TAB    &none      &none         &mmv MOVE_UP  &kp LALT   &none                              &mmv MOVE_UP                              &none     &none     &none     &kp DOWN  &kp UP    &kp RSHIFT
 // Row 1: LEFT (6 keys) + CENTER (3 keys) + RIGHT (6 keys)
-&kp LSHIFT &kp LCTRL  &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &kp LGUI  &mmv MOVE_LEFT  &mkp LCLK      &mmv MOVE_RIGHT  &kp C_PP  &kp LEFT  &kp RIGHT &kp PG_DN &kp PG_UP &kp RSHIFT
+&kp LSHIFT &kp LCTRL  &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &kp LGUI  &mmv MOVE_LEFT  &mkp LCLK      &mmv MOVE_RIGHT  &kp C_PP  &kp PG_DN &kp PG_UP &kp LEFT  &kp RIGHT &kp RSHIFT
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
 &kp LSHIFT &none      &kp LG(LS(LC(LA(F)))) &kp LG(LS(LC(LA(D)))) &kp LG(LS(LC(LA(G)))) &kp LG(LS(LC(LA(C)))) &trans  &mmv MOVE_DOWN  &kp C_MUTE &kp HOME  &kp END   &none     &none     &kp RSHIFT
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
