@@ -5,7 +5,7 @@ set -e
 # Handles build, download, and flash for both Dongle (OLED) and Choc (LCD) versions
 
 DONGLE_REPO="PAN-Chuwen/zmk-corne-dongle"
-CHOC_REPO="PAN-Chuwen/zmk-choc-corne"
+CHOC_REPO="PAN-Chuwen/zmk-corne-choc"
 OUTPUT_DIR="$(dirname "$0")/output"
 
 # Colors

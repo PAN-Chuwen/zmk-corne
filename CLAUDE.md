@@ -7,7 +7,7 @@ This repository manages **TWO keyboard variants**:
 | Variant | Repository | Display | Devices |
 |---------|------------|---------|---------|
 | **Dongle (OLED)** | [zmk-corne-dongle](https://github.com/PAN-Chuwen/zmk-corne-dongle) | OLED | Dongle + Left + Right |
-| **Choc (LCD)** | [zmk-choc-corne](https://github.com/PAN-Chuwen/zmk-choc-corne) | LCD (nice_view) | Left + Right only |
+| **Choc (LCD)** | [zmk-corne-choc](https://github.com/PAN-Chuwen/zmk-corne-choc) | LCD (nice_view) | Left + Right only |
 
 ## Quick Start
 
