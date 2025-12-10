@@ -21,8 +21,8 @@ This repository manages **TWO keyboard variants**:
 # Check build status
 ./zmk.sh status
 
-# Sync keymap to Choc repo
-./zmk.sh sync
+# Generate keymap diagram (requires uv)
+./zmk.sh draw
 ```
 
 ## Hardware
@@ -59,17 +59,17 @@ Total: 48 keys | Positions 0-47 (left-to-right, 0-indexed)
 
 **Layer 0 (QWERTY) Current Mapping**:
 ```
-Row 0: 0=`~  1=Q  2=W  3=E   4=R   5=T   6=↑   7=Y  8=U  9=I  10=O  11=←  12=→
+Row 0: 0=`~  1=Q  2=W  3=E   4=R   5=T   6=↑   7=Y  8=U  9=I  10=O  11=_  12=Fn
 Row 1: 13=⇧ 14=A 15=S 16=D  17=F  18=G  19=←  20=⏎ 21=→  22=H 23=J 24=K 25=L 26=P 27=⇧
 Row 2: 28=⇪ 29=Z 30=X 31=C  32=V  33=B  34=␣  35=↓  36=N 37=M 38=, 39=. 40=/ 41=⇧
 Thumb: 42=⌘ 43=␣ 44=⏎  45=⌫  46=L1  47=L2
 ```
 
 **Layers**:
-- Layer 0 (QWERTY): Base typing layer with nav arrows in center column
+- Layer 0 (QWERTY): Base typing layer with nav arrows in center column, Fn access at position 12
 - Layer 1 (NUMBER): Numbers, symbols, mouse in center column
-- Layer 2 (NAV): Mouse movement (ESDF on left), LEFT/RIGHT arrows on O and next key
-- Layer 3 (Fn): Function keys, bootloader, system reset, SHIFT on both sides
+- Layer 2 (NAV): Mouse movement (ESDF on left), arrow keys, page nav
+- Layer 3 (Fn): F1-F12, volume (VOL-/VOL+/MUTE), brightness (BRI-/BRI+), media (PREV/NEXT/PLAY)
 
 **Thumb Keys**:
 - LEFT (42-44): GUI, SPACE, ENTER
@@ -83,7 +83,6 @@ Thumb: 42=⌘ 43=␣ 44=⏎  45=⌫  46=L1  47=L2
   - LEFT: S+D = CTRL, D+F = ALT, F+G = CMD
   - RIGHT: H+J = CMD, J+K = OPTION, K+L = CTRL
   - Multi-key: H+J+K = CMD+OPTION, J+K+L = OPTION+CTRL
-- **Arrow Combos**: U+K = DOWN, I+L = UP (U+I and I+O disabled)
 - **Mouse Movement**: Layer 2 (NAV) - ESDF for directional control
 
 ## Repository Structure
@@ -144,24 +143,23 @@ vim config/eyeslash_corne.keymap
 3. Copy firmware: `cp output/dongle/dongle.uf2 /Volumes/NICENANO/`
 4. Device automatically reboots
 
-### 4. Sync Keymap to Choc Repo
-
-The Choc keyboard uses a different GitHub repo but shares the same keymap:
+### 4. Generate Keymap Diagram
 
 ```bash
-./zmk.sh sync
-# Uploads keymap to PAN-Chuwen/zmk-choc-corne
-# Then trigger build with: ./zmk.sh build choc
+./zmk.sh draw
+# Generates keymap.yaml, keymap.svg, and timestamped PNG
+# Displays in terminal via chafa
+# Requires: brew install uv librsvg
 ```
 
 ## zmk.sh Commands
 
 | Command | Description |
 |---------|-------------|
-| `./zmk.sh build [dongle\|choc\|both]` | Build, wait, and download firmware |
+| `./zmk.sh build [dongle\|choc\|both]` | Build, wait, and download firmware (auto-syncs keymap) |
 | `./zmk.sh flash` | Interactive firmware flashing |
+| `./zmk.sh draw` | Generate keymap diagram (SVG + PNG) |
 | `./zmk.sh status` | Show build status and local firmware |
-| `./zmk.sh sync` | Sync keymap to Choc repo |
 | `./zmk.sh help` | Show help |
 
 ## Key Files
