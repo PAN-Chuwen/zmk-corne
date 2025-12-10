@@ -261,7 +261,7 @@
             display-name = "QWERTY";
             bindings = <
 // Row 0: LEFT (6 keys) + CENTER (1 key) + RIGHT (6 keys)
-&td_backtick &kp Q  &kp W  &kp E     &kp R      &kp T                         &kp UP          &kp Y     &kp U     &kp I     &kp O     &kp LEFT   &kp RIGHT
+&td_backtick &kp Q  &kp W  &kp E     &kp R      &kp T                         &kp UP          &kp Y     &kp U     &kp I     &kp O     &none      &mo 3
 // Row 1: LEFT (6 keys) + CENTER (3 keys) + RIGHT (6 keys)
 &kp LSHIFT   &kp A  &kp S  &kp D     &kp F      &kp G        &kp LEFT  &kp ENTER  &kp RIGHT  &kp H     &kp J     &kp K     &kp L     &kp P      &sk LSHIFT
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
@@ -306,11 +306,11 @@
             display-name = "Fn";
             bindings = <
 // Row 0: LEFT (6 keys) + CENTER (1 key) + RIGHT (6 keys)
-&trans         &none       &kp F1      &kp F2        &kp F3     &kp F4                             &mmv MOVE_UP                              &kp F5        &none         &kp F6        &kp F7        &kp F8        &kp F9
+&kp ESC        &kp F1      &kp F2      &kp F3        &kp F4     &kp F5                             &mmv MOVE_UP                              &kp F6        &kp F7        &kp F8        &kp F9        &kp F10       &none
 // Row 1: LEFT (6 keys) + CENTER (3 keys) + RIGHT (6 keys)
-&kp LSHIFT     &trans      &mkp LCLK   &mkp MCLK     &mkp RCLK  &mkp MB4      &mmv MOVE_LEFT  &mkp LCLK      &mmv MOVE_RIGHT  &bootloader   &mkp LCLK     &mkp MCLK     &mkp RCLK     &kp F10       &kp RSHIFT
+&kp C_BRI_DN   &kp C_VOL_DN &kp C_VOL_UP &kp C_MUTE  &none      &none         &mmv MOVE_LEFT  &mkp LCLK      &mmv MOVE_RIGHT  &none         &none         &none         &kp F11       &kp F12       &none
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
-&kp LSHIFT     &sys_reset  &soft_off   &bootloader   &trans     &mkp MB5      &kp C_MUTE                    &mmv MOVE_DOWN              &trans        &trans        &bootloader   &sys_reset    &kp PSCRN     &kp RSHIFT
+&kp C_BRI_UP   &kp C_PREV  &kp C_NEXT  &kp C_PP      &none      &none         &kp C_MUTE                    &mmv MOVE_DOWN              &none         &none         &none         &none         &none         &none
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
                                        &trans        &trans     &trans                                                                  &trans        &trans        &trans
             >;
