@@ -19,6 +19,4 @@ migrate_vial_to_zmk.py
 vial.vil
 
 # Keymap visualization (auto-generated)
-keymap.yaml
-keymap.svg
-keymap_*.png
+keymap/

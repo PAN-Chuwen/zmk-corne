@@ -386,10 +386,13 @@ cmd_draw() {
 
     local keymap_file="config/eyeslash_corne.keymap"
     local layout_file="config/eyeslash_corne.json"
-    local yaml_file="keymap.yaml"
-    local svg_file="keymap.svg"
-    local timestamp=$(date +%Y%m%d_%H%M%S)
-    local png_file="keymap_${timestamp}.png"
+    local output_dir="$(dirname "$0")/keymap"
+    local yaml_file="$output_dir/keymap.yaml"
+    local svg_file="$output_dir/keymap.svg"
+    local png_file="$output_dir/keymap.png"
+
+    # Ensure output directory exists
+    mkdir -p "$output_dir"
 
     # Check if uv is installed
     if ! command -v uvx &> /dev/null; then
@@ -420,7 +423,7 @@ cmd_draw() {
     uvx --from keymap-drawer keymap draw "$yaml_file" -j "$layout_file" > "$svg_file"
     print_success "Generated $svg_file"
 
-    # Convert to PNG
+    # Convert to PNG and display
     if command -v rsvg-convert &> /dev/null; then
         print_info "Converting to PNG..."
         rsvg-convert "$svg_file" -o "$png_file"
@@ -429,15 +432,22 @@ cmd_draw() {
         # Display in terminal with chafa
         if command -v chafa &> /dev/null; then
             echo ""
-            chafa "$png_file"
+            chafa --size=120 "$png_file"
+        else
+            print_info "Install chafa for terminal preview: brew install chafa"
+            open "$png_file"
         fi
     else
         print_info "Install librsvg for PNG: brew install librsvg"
-        open "$svg_file"
+        if command -v chafa &> /dev/null; then
+            chafa --size=120 "$svg_file"
+        else
+            open "$svg_file"
+        fi
     fi
 
     echo ""
-    print_success "Done! Files: $yaml_file, $svg_file, $png_file"
+    print_success "Output: $output_dir/"
 }
 
 # ============================================
