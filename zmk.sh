@@ -379,6 +379,57 @@ cmd_flash() {
 }
 
 # ============================================
+# DRAW COMMAND
+# ============================================
+cmd_draw() {
+    print_header "Generate Keymap Diagram"
+
+    local keymap_file="config/eyeslash_corne.keymap"
+    local layout_file="config/eyeslash_corne.json"
+    local yaml_file="keymap.yaml"
+    local svg_file="keymap.svg"
+
+    # Check if uv is installed
+    if ! command -v uvx &> /dev/null; then
+        print_error "uv not installed"
+        echo ""
+        echo "Install with:"
+        echo "  brew install uv"
+        exit 1
+    fi
+
+    if [ ! -f "$keymap_file" ]; then
+        print_error "Keymap not found: $keymap_file"
+        exit 1
+    fi
+
+    if [ ! -f "$layout_file" ]; then
+        print_error "Layout not found: $layout_file"
+        exit 1
+    fi
+
+    # Parse keymap to YAML
+    print_info "Parsing keymap..."
+    uvx --from keymap-drawer keymap parse -z "$keymap_file" > "$yaml_file"
+    print_success "Generated $yaml_file"
+
+    # Draw SVG with layout JSON
+    print_info "Drawing SVG..."
+    uvx --from keymap-drawer keymap draw "$yaml_file" -j "$layout_file" > "$svg_file"
+    print_success "Generated $svg_file"
+
+    # Open SVG (macOS)
+    if command -v open &> /dev/null; then
+        print_info "Opening $svg_file..."
+        open "$svg_file"
+    fi
+
+    echo ""
+    print_success "Done! Files: $yaml_file, $svg_file"
+    echo "  (Both files are gitignored)"
+}
+
+# ============================================
 # STATUS COMMAND
 # ============================================
 cmd_status() {
@@ -413,6 +464,7 @@ cmd_help() {
     echo "Commands:"
     echo "  build [dongle|choc|both]     Build firmware (auto-syncs keymap, waits, downloads)"
     echo "  flash                        Flash firmware to keyboard"
+    echo "  draw                         Generate keymap SVG diagram (requires keymap-drawer)"
     echo "  status                       Show build status and local firmware"
     echo "  help                         Show this help"
     echo ""
@@ -420,6 +472,7 @@ cmd_help() {
     echo "  $0 build                     # Build both keyboards"
     echo "  $0 build dongle              # Build only dongle"
     echo "  $0 flash                     # Flash firmware (interactive)"
+    echo "  $0 draw                      # Generate keymap.svg"
 }
 
 case "${1:-help}" in
@@ -429,6 +482,9 @@ case "${1:-help}" in
         ;;
     flash)
         cmd_flash
+        ;;
+    draw)
+        cmd_draw
         ;;
     status)
         cmd_status
