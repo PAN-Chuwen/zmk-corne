@@ -388,6 +388,8 @@ cmd_draw() {
     local layout_file="config/eyeslash_corne.json"
     local yaml_file="keymap.yaml"
     local svg_file="keymap.svg"
+    local timestamp=$(date +%Y%m%d_%H%M%S)
+    local png_file="keymap_${timestamp}.png"
 
     # Check if uv is installed
     if ! command -v uvx &> /dev/null; then
@@ -418,15 +420,24 @@ cmd_draw() {
     uvx --from keymap-drawer keymap draw "$yaml_file" -j "$layout_file" > "$svg_file"
     print_success "Generated $svg_file"
 
-    # Open SVG (macOS)
-    if command -v open &> /dev/null; then
-        print_info "Opening $svg_file..."
+    # Convert to PNG
+    if command -v rsvg-convert &> /dev/null; then
+        print_info "Converting to PNG..."
+        rsvg-convert "$svg_file" -o "$png_file"
+        print_success "Generated $png_file"
+
+        # Display in terminal with chafa
+        if command -v chafa &> /dev/null; then
+            echo ""
+            chafa "$png_file"
+        fi
+    else
+        print_info "Install librsvg for PNG: brew install librsvg"
         open "$svg_file"
     fi
 
     echo ""
-    print_success "Done! Files: $yaml_file, $svg_file"
-    echo "  (Both files are gitignored)"
+    print_success "Done! Files: $yaml_file, $svg_file, $png_file"
 }
 
 # ============================================

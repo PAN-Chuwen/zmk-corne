@@ -21,3 +21,4 @@ vial.vil
 # Keymap visualization (auto-generated)
 keymap.yaml
 keymap.svg
+keymap_*.png
