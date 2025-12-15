@@ -1,5 +1,8 @@
 ---
 include:
+  # ==========================================
+  # Dongle version (OLED displays)
+  # ==========================================
   - board: nice_nano_v2
     shield: eyeslash_corne_central_dongle dongle_display
     snippet: studio-rpc-usb-uart
@@ -11,3 +14,15 @@ include:
     shield: eyeslash_corne_peripheral_right nice_oled
   - board: nice_nano_v2
     shield: settings_reset
+
+  # ==========================================
+  # Choc version (nice_view LCD displays)
+  # ==========================================
+  - board: nice_nano_v2
+    shield: eyeslash_corne_left nice_view_adapter nice_view
+    snippet: studio-rpc-usb-uart
+    cmake-args: -DCONFIG_ZMK_STUDIO=y -DCONFIG_ZMK_STUDIO_LOCKING=n
+    artifact-name: eyeslash_corne_choc_left
+  - board: nice_nano_v2
+    shield: eyeslash_corne_right nice_view_adapter nice_view
+    artifact-name: eyeslash_corne_choc_right

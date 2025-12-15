@@ -1,7 +1,7 @@
 file_format: "1"
 id: eyeslash_corne
-name: Eyeslash Sofle
-url: https://github.com/a741725193/zmk-corne-dongle
+name: Eyeslash Corne
+url: https://github.com/PAN-Chuwen/zmk-corne
 type: shield
 requires: [pro_micro]
 features:
@@ -11,6 +11,10 @@ outputs:
   - usb
   - ble
 siblings:
+  # Dongle version (OLED)
   - eyeslash_corne_peripheral_left
   - eyeslash_corne_peripheral_right
   - eyeslash_corne_central_dongle
+  # Choc version (nice_view LCD)
+  - eyeslash_corne_left
+  - eyeslash_corne_right

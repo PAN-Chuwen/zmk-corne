@@ -1,3 +1,4 @@
+# Dongle version - central
 if SHIELD_EYESLASH_CORNE_CENTRAL_DONGLE
 
 config ZMK_KEYBOARD_NAME
@@ -8,12 +9,22 @@ config ZMK_SPLIT_ROLE_CENTRAL
 
 endif
 
+# Choc version - left is central
+if SHIELD_EYESLASH_CORNE_LEFT
 
+config ZMK_KEYBOARD_NAME
+    default "Eyeslash Corne Choc"
+
+config ZMK_SPLIT_ROLE_CENTRAL
+    default y
+
+endif
+
+# All dongle shields (OLED)
 if SHIELD_EYESLASH_CORNE_CENTRAL_DONGLE || SHIELD_EYESLASH_CORNE_PERIPHERAL_LEFT || SHIELD_EYESLASH_CORNE_PERIPHERAL_RIGHT
 
 config ZMK_SPLIT
     default y
-
 
 if ZMK_DISPLAY
 
@@ -42,6 +53,32 @@ config LV_Z_BITS_PER_PIXEL
 
 choice LV_COLOR_DEPTH
     default LV_COLOR_DEPTH_1
+endchoice
+
+endif
+
+if ZMK_BACKLIGHT
+
+config PWM
+    default y
+
+config LED_PWM
+    default y
+
+endif # ZMK_BACKLIGHT
+
+endif
+
+# All choc shields (nice_view LCD)
+if SHIELD_EYESLASH_CORNE_LEFT || SHIELD_EYESLASH_CORNE_RIGHT
+
+config ZMK_SPLIT
+    default y
+
+if ZMK_DISPLAY
+
+choice ZMK_DISPLAY_WORK_QUEUE
+    default ZMK_DISPLAY_WORK_QUEUE_DEDICATED
 endchoice
 
 endif

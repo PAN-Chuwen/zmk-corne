@@ -1,6 +1,7 @@
 # Copyright (c) 2020 The ZMK Contributors
 # SPDX-License-Identifier: MIT
 
+# Dongle version (OLED)
 config SHIELD_EYESLASH_CORNE_CENTRAL_DONGLE
     def_bool $(shields_list_contains,eyeslash_corne_central_dongle)
 
@@ -9,3 +10,10 @@ config SHIELD_EYESLASH_CORNE_PERIPHERAL_LEFT
 
 config SHIELD_EYESLASH_CORNE_PERIPHERAL_RIGHT
     def_bool $(shields_list_contains,eyeslash_corne_peripheral_right)
+
+# Choc version (nice_view LCD)
+config SHIELD_EYESLASH_CORNE_LEFT
+    def_bool $(shields_list_contains,eyeslash_corne_left)
+
+config SHIELD_EYESLASH_CORNE_RIGHT
+    def_bool $(shields_list_contains,eyeslash_corne_right)
