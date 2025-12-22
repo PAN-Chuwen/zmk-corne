@@ -8,7 +8,7 @@ Custom ZMK firmware for the Eyeslash Corne 42-key split keyboard.
 
 | Variant | Display | Connection | Firmware | Buy |
 |---------|---------|------------|----------|-----|
-| **Dongle (OLED)** | OLED | Keyboards → Dongle (BT) → Mac (USB) | [zmk-corne-dongle](https://github.com/PAN-Chuwen/zmk-corne-dongle) | [Taobao](https://e.tb.cn/h.7VsTwLbeqbA7mkb?tk=IM08fxaOSZd) |
+| **Dongle (OLED)** | OLED | Keyboards → Dongle (BT) → Mac (USB) | [zmk-corne-dongle](https://github.com/PAN-Chuwen/zmk-corne-dongle) | [Keyboard](https://e.tb.cn/h.74bzHdyUEMXPbX6?tk=cd7PfxaLxbs) + [Dongle](https://e.tb.cn/h.7VsTwLbeqbA7mkb?tk=IM08fxaOSZd) |
 | **Choc (LCD)** | nice_view LCD | Right → Left (BT) → Mac (USB) | [zmk-corne-choc](https://github.com/PAN-Chuwen/zmk-corne-choc) | [Taobao](https://e.tb.cn/h.74bHNHPbyg9pZ7X?tk=Pt48fxaQkwL) |
 
 ## Keymap

@@ -8,7 +8,7 @@ Eyeslash Corne 42键分体键盘的自定义 ZMK 固件。
 
 | 版本 | 显示屏 | 连接方式 | 固件仓库 | 购买 |
 |------|--------|----------|----------|------|
-| **Dongle版 (OLED)** | OLED | 键盘 → 接收器 (蓝牙) → Mac (USB) | [zmk-corne-dongle](https://github.com/PAN-Chuwen/zmk-corne-dongle) | [淘宝](https://e.tb.cn/h.7VsTwLbeqbA7mkb?tk=IM08fxaOSZd) |
+| **Dongle版 (OLED)** | OLED | 键盘 → 接收器 (蓝牙) → Mac (USB) | [zmk-corne-dongle](https://github.com/PAN-Chuwen/zmk-corne-dongle) | [键盘](https://e.tb.cn/h.74bzHdyUEMXPbX6?tk=cd7PfxaLxbs) + [接收器](https://e.tb.cn/h.7VsTwLbeqbA7mkb?tk=IM08fxaOSZd) |
 | **Choc版 (LCD)** | nice_view LCD | 右手 → 左手 (蓝牙) → Mac (USB) | [zmk-corne-choc](https://github.com/PAN-Chuwen/zmk-corne-choc) | [淘宝](https://e.tb.cn/h.74bHNHPbyg9pZ7X?tk=Pt48fxaQkwL) |
 
 ## 键位图
