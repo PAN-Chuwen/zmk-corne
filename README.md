@@ -2,7 +2,7 @@
 
 [English](README.md) | [中文](README_CN.md)
 
-Custom ZMK firmware for the Eyeslash Corne 48-key split keyboard.
+Custom ZMK firmware for the Eyeslash Corne 42-key split keyboard.
 
 ## Keyboard Variants
 

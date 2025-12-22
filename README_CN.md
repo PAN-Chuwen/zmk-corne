@@ -2,7 +2,7 @@
 
 [English](README.md) | [中文](README_CN.md)
 
-Eyeslash Corne 48键分体键盘的自定义 ZMK 固件。
+Eyeslash Corne 42键分体键盘的自定义 ZMK 固件。
 
 ## 键盘版本
 
