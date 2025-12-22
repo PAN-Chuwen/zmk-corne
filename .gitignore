@@ -18,5 +18,6 @@ output/
 migrate_vial_to_zmk.py
 vial.vil
 
-# Keymap visualization (auto-generated)
-keymap/
+# Keymap visualization (keep SVG for README, ignore build artifacts)
+keymap/*.yaml
+keymap/*.png
