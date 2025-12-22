@@ -1,5 +1,7 @@
 # ZMK Corne Configuration
 
+[English](README.md) | [中文](README_CN.md)
+
 Custom ZMK firmware for the Eyeslash Corne 48-key split keyboard.
 
 ## Keyboard Variants
@@ -10,6 +12,8 @@ Custom ZMK firmware for the Eyeslash Corne 48-key split keyboard.
 | **Choc (LCD)** | nice_view LCD | Right → Left (BT) → Mac (USB) | [zmk-corne-choc](https://github.com/PAN-Chuwen/zmk-corne-choc) |
 
 ## Keymap
+
+> This is my personal keymap. Fork this repo and edit `config/eyeslash_corne.keymap` to customize your own layout.
 
 ![Keymap](keymap/keymap.svg)
 
