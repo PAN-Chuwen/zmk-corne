@@ -287,12 +287,12 @@ cmd_draw() {
 
     # Parse keymap to YAML
     print_info "Parsing keymap..."
-    uvx --from keymap-drawer keymap parse -z "$keymap_file" > "$yaml_file"
+    uvx --from keymap-drawer --with "tree-sitter<0.23" keymap parse -z "$keymap_file" > "$yaml_file"
     print_success "Generated $yaml_file"
 
     # Draw SVG with layout JSON
     print_info "Drawing SVG..."
-    uvx --from keymap-drawer keymap draw "$yaml_file" -j "$layout_file" > "$svg_file"
+    uvx --from keymap-drawer --with "tree-sitter<0.23" keymap draw "$yaml_file" -j "$layout_file" > "$svg_file"
     print_success "Generated $svg_file"
 
     # Convert to PNG and display
