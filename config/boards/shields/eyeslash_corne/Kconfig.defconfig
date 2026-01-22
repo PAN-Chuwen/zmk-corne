@@ -2,7 +2,7 @@
 if SHIELD_EYESLASH_CORNE_CENTRAL_DONGLE
 
 config ZMK_KEYBOARD_NAME
-    default "zmk-corne-dongle"
+    default "zmk-dongle"
 
 config ZMK_SPLIT_ROLE_CENTRAL
     default y
@@ -13,7 +13,7 @@ endif
 if SHIELD_EYESLASH_CORNE_LEFT
 
 config ZMK_KEYBOARD_NAME
-    default "zmk-corne-choc"
+    default "zmk-corne"
 
 config ZMK_SPLIT_ROLE_CENTRAL
     default y
