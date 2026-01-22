@@ -118,6 +118,14 @@
                 , <&macro_release &kp LSHIFT &kp LGUI>
                 ;
         };
+
+        tmux_prefix: tmux_prefix {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <30>;
+            tap-ms = <30>;
+            bindings = <&macro_tap &kp LC(B)>;
+        };
     };
 
     combos {
@@ -282,7 +290,7 @@
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
 &kp LSHIFT       &td_pipe       &td_bracket   &kp PLUS      &kp MINUS     &kp FSLH      &kp C_MUTE                    &mmv MOVE_DOWN              &td_angle     &kp N8        &kp N9        &kp N0        &none         &kp RSHIFT
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
-                                              &kp LGUI      &kp SPACE     &kp ENTER                                                                  &none         &none         &kp BSPC
+                                              &kp LGUI      &kp SPACE     &kp ENTER                                                                  &tmux_prefix  &none         &kp BSPC
             >;
             sensor-bindings = <&scroll_encoder>;
         };
