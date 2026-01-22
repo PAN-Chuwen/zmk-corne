@@ -10,6 +10,8 @@ manifest:
       url-base: https://github.com/englmaxi
     - name: mctechnology17
       url-base: https://github.com/mctechnology17
+    - name: zmk-display
+      url-base: https://github.com/PAN-Chuwen
   projects:
     - name: hammerbeam-slideshow
       remote: gpeye
@@ -22,7 +24,7 @@ manifest:
       remote: tokyo2006                          # <---
       revision: change_spi2
     - name: zmk-dongle-display
-      remote: englmaxi
+      remote: zmk-display
       revision: main
     - name: zmk-nice-oled
       remote: mctechnology17
