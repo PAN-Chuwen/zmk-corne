@@ -284,13 +284,13 @@
             display-name = "NUMBER";
             bindings = <
 // Row 0: LEFT (6 keys) + CENTER (1 key) + RIGHT (6 keys)
-&td_backtick     &td_backtick   &kp QMARK     &kp DOT       &td_paren     &td_brace                          &mmv MOVE_UP                              &none         &kp N1        &kp N2        &kp N3        &none         &kp ENTER
+&td_backtick     &tmux_prefix   &kp QMARK     &kp DOT       &td_paren     &td_brace                          &mmv MOVE_UP                              &none         &kp N1        &kp N2        &kp N3        &none         &kp ENTER
 // Row 1: LEFT (6 keys) + CENTER (3 keys) + RIGHT (6 keys)
 &kp LSHIFT       &kp UNDER      &td_colon     &td_quote     &kp COMMA     &kp EQUAL     &mmv MOVE_LEFT  &mkp LCLK      &mmv MOVE_RIGHT  &kp N4        &kp N5        &kp N6        &kp N7        &kp N0        &kp RSHIFT
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
 &kp LSHIFT       &td_pipe       &td_bracket   &kp PLUS      &kp MINUS     &kp FSLH      &kp C_MUTE                    &mmv MOVE_DOWN              &td_angle     &kp N8        &kp N9        &kp N0        &none         &kp RSHIFT
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
-                                              &tmux_prefix  &kp SPACE     &kp ENTER                                                                  &none         &none         &kp BSPC
+                                              &kp LGUI      &kp SPACE     &kp ENTER                                                                  &none         &none         &kp BSPC
             >;
             sensor-bindings = <&scroll_encoder>;
         };
