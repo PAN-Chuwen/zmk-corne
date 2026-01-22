@@ -303,6 +303,7 @@ cmd_draw() {
     fi
 
     # Parse keymap to YAML
+    # Note: tree-sitter<0.23 required for keymap-drawer compatibility
     print_info "Parsing keymap..."
     uvx --from keymap-drawer --with "tree-sitter<0.23" keymap parse -z "$keymap_file" > "$yaml_file"
     print_success "Generated $yaml_file"
