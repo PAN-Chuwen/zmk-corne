@@ -316,9 +316,9 @@
 // Row 0: LEFT (6 keys) + CENTER (1 key) + RIGHT (6 keys)
 &bt BT_CLR     &kp F1      &kp F2      &kp F3        &kp F4     &kp F5                             &mmv MOVE_UP                              &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &none         &none
 // Row 1: LEFT (6 keys) + CENTER (3 keys) + RIGHT (6 keys)
-&kp C_BRI_DN   &kp C_VOL_DN &none        &none        &none        &none         &mmv MOVE_LEFT  &mkp LCLK      &mmv MOVE_RIGHT  &kp C_PP      &kp C_PREV    &none         &kp F11       &kp F12       &none
+&none          &none        &none        &none        &none        &none         &mmv MOVE_LEFT  &mkp LCLK      &mmv MOVE_RIGHT  &kp C_PP      &kp C_PREV    &kp C_VOL_DN  &kp C_BRI_DN  &kp F11       &kp F12
 // Row 2: LEFT (6 keys) + CENTER (2 keys) + RIGHT (6 keys)
-&kp C_BRI_UP   &kp C_VOL_UP &kp C_MUTE  &none        &none      &none         &none                         &mmv MOVE_DOWN              &none         &kp C_NEXT    &none         &none         &none         &none
+&none          &none        &none        &none        &none      &none         &none                         &mmv MOVE_DOWN              &kp C_MUTE    &kp C_NEXT    &kp C_VOL_UP  &kp C_BRI_UP  &none         &none
 // Row 3: LEFT thumbs (3 keys) + RIGHT thumbs (3 keys)
                                        &trans        &trans     &trans                                                                  &trans        &trans        &trans
             >;
