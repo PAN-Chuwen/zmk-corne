@@ -306,6 +306,19 @@ cmd_draw() {
     # Note: tree-sitter<0.23 required for keymap-drawer compatibility
     print_info "Parsing keymap..."
     uvx --from keymap-drawer --with "tree-sitter<0.23" keymap parse -z "$keymap_file" > "$yaml_file"
+
+    # Add Template layer with key positions (0-47) for reference
+    print_info "Adding Template layer..."
+    local temp_file="${yaml_file}.tmp"
+    awk '
+    /^combos:/ {
+        print "  Template:"
+        for (i = 0; i <= 47; i++) {
+            print "  - '\''" i "'\''"
+        }
+    }
+    { print }
+    ' "$yaml_file" > "$temp_file" && mv "$temp_file" "$yaml_file"
     print_success "Generated $yaml_file"
 
     # Draw SVG with layout JSON
