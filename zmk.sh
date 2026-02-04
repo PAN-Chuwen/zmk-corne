@@ -327,7 +327,12 @@ cmd_draw() {
         # Display in terminal with chafa
         if command -v chafa &> /dev/null; then
             echo ""
-            chafa --size=120 "$png_file"
+            # Use symbols format in tmux (graphics protocols don't pass through)
+            if [ -n "$TMUX" ]; then
+                chafa --size=120 --format=symbols "$png_file"
+            else
+                chafa --size=120 "$png_file"
+            fi
         else
             print_info "Install chafa for terminal preview: brew install chafa"
             open "$png_file"
@@ -335,7 +340,12 @@ cmd_draw() {
     else
         print_info "Install librsvg for PNG: brew install librsvg"
         if command -v chafa &> /dev/null; then
-            chafa --size=120 "$svg_file"
+            # Use symbols format in tmux
+            if [ -n "$TMUX" ]; then
+                chafa --size=120 --format=symbols "$svg_file"
+            else
+                chafa --size=120 "$svg_file"
+            fi
         else
             open "$svg_file"
         fi
