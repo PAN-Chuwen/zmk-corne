@@ -254,18 +254,18 @@ cmd_flash() {
 # DRAW COMMAND
 # ============================================
 cmd_draw() {
-    local keys_only=false
+    local keys_only=true
 
     # Parse arguments
     while [[ $# -gt 0 ]]; do
         case $1 in
-            --keys-only)
-                keys_only=true
+            --with-combos)
+                keys_only=false
                 shift
                 ;;
             *)
                 print_error "Unknown option: $1"
-                echo "Usage: $0 draw [--keys-only]"
+                echo "Usage: $0 draw [--with-combos]"
                 exit 1
                 ;;
         esac
@@ -326,7 +326,8 @@ cmd_draw() {
     local draw_opts=""
     if [ "$keys_only" = true ]; then
         draw_opts="--keys-only"
-        print_info "Excluding combos (--keys-only)"
+    else
+        print_info "Including combo links (--with-combos)"
     fi
     uvx --from keymap-drawer --with "tree-sitter<0.23" keymap draw "$yaml_file" -j "$layout_file" $draw_opts > "$svg_file"
     print_success "Generated $svg_file"
@@ -395,8 +396,8 @@ cmd_help() {
     echo "Examples:"
     echo "  $0 build        # Build both dongle and choc firmware"
     echo "  $0 flash        # Flash firmware (select dongle or choc)"
-    echo "  $0 draw         # Generate keymap.svg with combos"
-    echo "  $0 draw --keys-only  # Generate keymap.svg without combos"
+    echo "  $0 draw              # Generate keymap.svg (keys only)"
+    echo "  $0 draw --with-combos  # Generate keymap.svg with combo links"
 }
 
 case "${1:-help}" in
