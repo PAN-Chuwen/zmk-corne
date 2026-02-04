@@ -327,9 +327,9 @@ cmd_draw() {
         # Display in terminal with chafa
         if command -v chafa &> /dev/null; then
             echo ""
-            # Use passthrough mode in tmux for proper graphics rendering
+            # Use symbols format in tmux (graphics passthrough is unreliable)
             if [ -n "$TMUX" ]; then
-                chafa --size=120 --passthrough=tmux "$png_file"
+                chafa --size=120 --format=symbols "$png_file"
             else
                 chafa --size=120 "$png_file"
             fi
@@ -341,7 +341,7 @@ cmd_draw() {
         print_info "Install librsvg for PNG: brew install librsvg"
         if command -v chafa &> /dev/null; then
             if [ -n "$TMUX" ]; then
-                chafa --size=120 --passthrough=tmux "$svg_file"
+                chafa --size=120 --format=symbols "$svg_file"
             else
                 chafa --size=120 "$svg_file"
             fi
