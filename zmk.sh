@@ -327,9 +327,9 @@ cmd_draw() {
         # Display in terminal with chafa
         if command -v chafa &> /dev/null; then
             echo ""
-            # Use symbols format in tmux (graphics passthrough is unreliable)
+            # Use kitty protocol with passthrough in tmux (works with Ghostty/Kitty)
             if [ -n "$TMUX" ]; then
-                chafa --size=120 --format=symbols "$png_file"
+                chafa --size=120 --format=kitty --passthrough=tmux "$png_file"
             else
                 chafa --size=120 "$png_file"
             fi
@@ -341,7 +341,7 @@ cmd_draw() {
         print_info "Install librsvg for PNG: brew install librsvg"
         if command -v chafa &> /dev/null; then
             if [ -n "$TMUX" ]; then
-                chafa --size=120 --format=symbols "$svg_file"
+                chafa --size=120 --format=kitty --passthrough=tmux "$svg_file"
             else
                 chafa --size=120 "$svg_file"
             fi
