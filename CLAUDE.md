@@ -59,7 +59,7 @@ Total: 48 keys | Positions 0-47 (left-to-right, 0-indexed)
 
 **Layer 0 (QWERTY) Current Mapping**:
 ```
-Row 0: 0=`~  1=Q  2=W  3=E   4=R   5=T   6=↑   7=Y  8=U  9=I  10=O  11=_  12=Fn
+Row 0: 0=`~  1=Q  2=W  3=E   4=R   5=T   6=↑   7=Y  8=U  9=I  10=O  11=·  12=Fn
 Row 1: 13=⇧ 14=A 15=S 16=D  17=F  18=G  19=←  20=⏎ 21=→  22=H 23=J 24=K 25=L 26=P 27=⇧
 Row 2: 28=⇪ 29=Z 30=X 31=C  32=V  33=B  34=␣  35=↓  36=N 37=M 38=, 39=. 40=/ 41=⇧
 Thumb: 42=⌘ 43=␣ 44=⏎  45=⌫  46=L1  47=L2
@@ -68,8 +68,8 @@ Thumb: 42=⌘ 43=␣ 44=⏎  45=⌫  46=L1  47=L2
 **Layers**:
 - Layer 0 (QWERTY): Base typing layer with nav arrows in center column, Fn access at position 12
 - Layer 1 (NUMBER): Numbers, symbols, mouse in center column
-- Layer 2 (NAV): Mouse movement (ESDF on left), arrow keys, page nav
-- Layer 3 (Fn): F1-F12, volume (VOL-/VOL+/MUTE), brightness (BRI-/BRI+), media (PREV/NEXT/PLAY)
+- Layer 2 (NAV): Mouse movement (ESDF on left), arrow keys, page nav, Hyper-key shortcuts (LG+LS+LC+LA) on Q/W/R/T/Y/U/I/A/G/H/N and Z/X/C/V/B
+- Layer 3 (Fn): F1-F12 (left), Bluetooth profile select BT_SEL 0-3 (row 0 left), media/volume/brightness (right), BT_CLR on right thumb (pos 45)
 
 **Thumb Keys**:
 - LEFT (42-44): GUI, SPACE, ENTER
@@ -93,7 +93,13 @@ Thumb: 42=⌘ 43=␣ 44=⏎  45=⌫  46=L1  47=L2
 │   ├── eyeslash_corne.keymap    # Main keymap (layers, keys, behaviors)
 │   ├── eyeslash_corne.conf      # Settings (display, Bluetooth, sleep)
 │   ├── eyeslash_corne.json      # ZMK Studio configuration
-│   └── west.yml                 # Dependencies manifest
+│   ├── west.yml                 # Dependencies manifest (zmk pin, modules)
+│   └── boards/shields/eyeslash_corne/
+│                                 # Shield definition: dtsi, overlays,
+│                                 # per-variant .conf files, Kconfig
+│
+├── .github/workflows/build.yml   # CI workflow (must pin to same zmk
+│                                 # ref as west.yml — see Troubleshooting)
 │
 ├── zmk.sh                        # Unified firmware management script
 ├── build.yaml                    # GitHub Actions build matrix
