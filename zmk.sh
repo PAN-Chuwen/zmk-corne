@@ -216,34 +216,20 @@ cmd_flash() {
         fi
     done
 
-    # Ask about settings reset
-    local do_reset=false
-    echo ""
-    read -n 1 -p "Reset settings first? (recommended for first flash) [y/N]: " reset_choice
-    echo ""
-
-    if [ "$reset_choice" = "y" ] || [ "$reset_choice" = "Y" ]; then
-        if [ -f "$firmware_dir/settings_reset.uf2" ]; then
-            do_reset=true
-        else
-            print_error "settings_reset.uf2 not found, skipping reset"
-        fi
+    # Settings reset is mandatory — BLE bonds must be cleared on every reflash
+    if [ ! -f "$firmware_dir/settings_reset.uf2" ]; then
+        print_error "settings_reset.uf2 not found at $firmware_dir/"
+        print_info "Run '$0 build' first"
+        exit 1
     fi
 
-    # Flash each device (reset + flash in one go per device)
+    # Flash each device: reset, then firmware
     for device in "${devices[@]}"; do
-        if [ "$do_reset" = true ]; then
-            print_header "Flash $device (reset + firmware)"
-            # First: reset
-            print_info "Step 1: Flashing settings_reset..."
-            flash_file "$device (reset)" "$firmware_dir/settings_reset.uf2"
-            # Second: firmware (same device, need to enter bootloader again)
-            print_info "Step 2: Flashing firmware..."
-            flash_file "$device" "$firmware_dir/$device.uf2"
-        else
-            print_header "Flash $device"
-            flash_file "$device" "$firmware_dir/$device.uf2"
-        fi
+        print_header "Flash $device (reset + firmware)"
+        print_info "Step 1: Flashing settings_reset..."
+        flash_file "$device (reset)" "$firmware_dir/settings_reset.uf2"
+        print_info "Step 2: Flashing firmware..."
+        flash_file "$device" "$firmware_dir/$device.uf2"
     done
 
     print_header "Complete!"
