@@ -88,7 +88,7 @@ Thumb: 42=⌘ 43=␣ 44=⏎  45=⌫  46=L1  47=L2
 ## Repository Structure
 
 ```
-~/zmk-corne-config/
+~/zmk-corne/
 ├── config/                       # Edit these for customization
 │   ├── eyeslash_corne.keymap    # Main keymap (layers, keys, behaviors)
 │   ├── eyeslash_corne.conf      # Settings (display, Bluetooth, sleep)
@@ -214,3 +214,5 @@ input_switch: input_switch {
 **Keys not working**: Ensure all devices have matching firmware versions
 
 **Build not triggering**: Check GitHub Actions is enabled on the repository
+
+**Build fails with `KeyError: 'qualifiers'` / "Missing ZMK Compat"**: The `.github/workflows/build.yml` workflow ref must match `config/west.yml`'s `zmk` revision. If the workflow points at `@main` while `west.yml` pins an older release (e.g. `v0.3.0`), the GitHub Actions toolchain rolls forward to Zephyr 4.1 / HWMv2 and breaks. Pin both to the same tag.
