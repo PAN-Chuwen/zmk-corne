@@ -222,3 +222,15 @@ input_switch: input_switch {
 **Build not triggering**: Check GitHub Actions is enabled on the repository
 
 **Build fails with `KeyError: 'qualifiers'` / "Missing ZMK Compat"**: The `.github/workflows/build.yml` workflow ref must match `config/west.yml`'s `zmk` revision. If the workflow points at `@main` while `west.yml` pins an older release (e.g. `v0.3.0`), the GitHub Actions toolchain rolls forward to Zephyr 4.1 / HWMv2 and breaks. Pin both to the same tag.
+
+**Choc right peripheral won't pair after a green build**: pinning the workflow to a release tag like `@v0.3.0` is *not* the same as pinning to the SHA that produced previously-working firmware. The workflow ref drives the entire build container/toolchain. To reproduce a known-working build, pin to its exact zmk@main SHA. Find the SHA from a date with successful runs:
+
+```bash
+gh api 'repos/zmkfirmware/zmk/commits?sha=main&until=2026-02-04T10:00:00Z&per_page=1' \
+  --jq '.[0] | {sha, date: .commit.author.date}'
+```
+
+Then in `.github/workflows/build.yml`:
+```yaml
+uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@<sha>
+```
