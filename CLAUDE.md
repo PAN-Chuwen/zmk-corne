@@ -217,6 +217,14 @@ input_switch: input_switch {
 
 **Connection issues**: Flash `settings_reset.uf2` to all devices, then reflash firmware
 
+**Right peripheral won't pair after flashing (cross-bond from another keyboard)**: If two keyboards (e.g. A and B) have ever had crossed pairings — say A's right was previously bonded to B's left — the stale BLE LTK can survive `settings_reset.uf2`. Symptom: one half's LCD lights up but no key reaches the host; `./zmk.sh flash` doesn't fix it.
+
+Recovery (one-shot, then revert):
+1. Add `CONFIG_ZMK_BLE_CLEAR_BONDS_ON_START=y` to *both* `eyeslash_corne_left.conf` and `eyeslash_corne_right.conf`.
+2. Build, then `./zmk.sh flash` choc — both halves wipe bonds on every boot.
+3. Confirm A's halves pair on the new firmware.
+4. Revert the two `.conf` edits, rebuild, `./zmk.sh flash` again so bonds aren't cleared on every boot in normal use.
+
 **Keys not working**: Ensure all devices have matching firmware versions
 
 **Build not triggering**: Check GitHub Actions is enabled on the repository
